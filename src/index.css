@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap');
+
+:root {
+  --yellow: #f4c41d;
+  --yellow-deep: #ddb000;
+  --black: #18130b;
+  --cream: #fff6e2;
+  --flavor-mango: #ff9d3d;
+  --flavor-pistachio: #98b25f;
+  --font-display: 'Baloo 2', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--yellow);
+  color: var(--black);
+  /* Belongs on the real scroll root, not an inner wrapper — overflow-x
+     on a nested div forces its overflow-y to "auto", which turns that
+     div into an unintended scroll container and silently breaks
+     position: sticky for anything inside it (used by the melt stage). */
+  overflow-x: hidden;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+}

@@ -1,0 +1,76 @@
+.closing-cup {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 4rem 1.5rem;
+}
+
+.closing-cup__scene {
+  position: relative;
+  height: clamp(300px, 44vh, 560px);
+  max-width: 85vw;
+  aspect-ratio: 200 / 260;
+  display: block;
+}
+
+.closing-cup__spoon {
+  position: absolute;
+  top: -6%;
+  right: 8%;
+  width: 12px;
+  height: 65%;
+  background: var(--black);
+  border-radius: 6px;
+  transform-origin: top center;
+  transition: transform 400ms ease;
+}
+
+.closing-cup__spoon::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 22px;
+  height: 14px;
+  background: var(--black);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+/* Positioned relative to the spoon (its parent) instead of the cup, so
+   it automatically rotates and moves together with the spoon below. */
+.closing-cup__scoop {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  background: var(--cream);
+  border: 4px solid var(--black);
+  border-radius: 50%;
+  transform: translate(-50%, 0) scale(0);
+  opacity: 0;
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+
+.is-scooped .closing-cup__spoon {
+  transform: translate(-16%, 32%) rotate(-25deg);
+}
+
+.is-scooped .closing-cup__scoop {
+  transform: translate(-50%, -14px) scale(1);
+  opacity: 1;
+}
+
+.closing-cup__credit {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: 0.03em;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}

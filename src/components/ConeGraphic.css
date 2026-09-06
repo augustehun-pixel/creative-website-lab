@@ -1,0 +1,18 @@
+.cone-graphic {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Every shape defaults to the background yellow with a bold black
+   outline, so it reads as a shape purely through its line work — just
+   like the reference photo's yellow-on-yellow packaging. A parent
+   component can override --shape-fill to give a shape its own color
+   (used for the flavor puddles and the cream-colored cup). */
+.cone-graphic path,
+.cone-graphic ellipse {
+  fill: var(--shape-fill, var(--yellow));
+  stroke: var(--black);
+  stroke-width: 6;
+  stroke-linejoin: round;
+}

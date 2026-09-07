@@ -1,0 +1,13 @@
+.potato {
+  display: block;
+  overflow: visible;
+}
+
+.potato__body {
+  fill: var(--kano-yellow);
+}
+
+.potato__mark {
+  fill: var(--kano-black);
+  opacity: 0.55;
+}

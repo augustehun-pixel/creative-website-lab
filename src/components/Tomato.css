@@ -1,0 +1,12 @@
+.tomato {
+  display: block;
+  overflow: visible;
+}
+
+.tomato__body {
+  fill: var(--kano-red);
+}
+
+.tomato__stem {
+  fill: var(--kano-blue);
+}

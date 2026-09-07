@@ -1,0 +1,354 @@
+/* ---------- stage ---------- */
+
+.kano-hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--kano-cream);
+  color: var(--kano-black);
+  font-family: var(--font-kano);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  padding: 1.25rem 1.25rem clamp(1.5rem, 4vh, 2.5rem);
+}
+
+/* ---------- main: side copy + centerpiece ---------- */
+/* width capped well under 100% so the whole composition sits inside
+   roughly 80-88% of the viewport width on desktop, not edge to edge. */
+
+.kano-hero__main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) auto minmax(80px, 1fr);
+  align-items: center;
+  column-gap: clamp(1rem, 4vw, 3rem);
+  width: min(1240px, 86%);
+  margin: 0 auto;
+  padding-top: clamp(0.5rem, 2vh, 1.25rem);
+}
+
+.kano-hero__side {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(0.75rem, 1.5vw, 0.98rem);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  line-height: 1.7;
+  opacity: 0.78;
+}
+
+.kano-hero__side--left {
+  justify-self: start;
+  text-align: left;
+  transform: rotate(-1.5deg);
+}
+
+.kano-hero__side--right {
+  justify-self: end;
+  text-align: right;
+  margin-top: clamp(1.5rem, 5vh, 3rem);
+  transform: rotate(1deg);
+}
+
+/* ---------- centerpiece: tomato + KANO + market label ---------- */
+
+.kano-hero__centerpiece {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.5rem, 1.6vh, 0.9rem);
+}
+
+/* Sized from both viewport width and height (via min()) so a near-square
+   shape lands close to the requested ~30-36% width / ~32-40% height on a
+   1440x900 screen without needing separate width/height rules. */
+.kano-hero__mark {
+  position: relative;
+  width: clamp(230px, min(33vw, 46vh), 440px);
+  transform: rotate(-1.5deg);
+}
+
+.kano-hero__tomato {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.kano-hero__wordmark {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.kano-hero__letter {
+  display: inline-block;
+  color: var(--kano-black);
+  font-weight: 700;
+  font-size: clamp(3.1rem, 10.5vw, 7.4rem);
+}
+
+.kano-hero__letter--k {
+  transform: rotate(-5deg) translateY(0.06em) scale(1.03);
+}
+.kano-hero__letter--a {
+  margin-left: -0.02em;
+  transform: rotate(4deg) translateY(-0.12em) scale(0.92);
+}
+.kano-hero__letter--n {
+  margin-left: -0.06em;
+  transform: rotate(-3deg) translateY(0.09em) scale(1.08);
+}
+.kano-hero__letter--o {
+  margin-left: -0.01em;
+  transform: rotate(6deg) translateY(-0.05em) scale(0.96);
+}
+
+/* ---------- vintage market label ---------- */
+
+.kano-hero__market {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.kano-hero__market-label {
+  margin: 0;
+  font-size: clamp(0.6rem, 1.4vw, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: var(--kano-black);
+}
+
+.kano-hero__market-stripes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.kano-hero__market-stripe {
+  height: 5px;
+  border-radius: 1px;
+}
+
+.kano-hero__market-stripe--blue {
+  width: 78px;
+  background: var(--kano-blue);
+}
+.kano-hero__market-stripe--red {
+  width: 58px;
+  background: var(--kano-red);
+}
+.kano-hero__market-stripe--yellow {
+  width: 68px;
+  background: var(--kano-yellow);
+}
+.kano-hero__market-stripe--orange {
+  width: 46px;
+  background: var(--kano-orange);
+}
+
+/* ---------- lineup: a loose collection, not a grid ---------- */
+
+.kano-hero__lineup {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(1rem, 3vh, 1.5rem) clamp(1.5rem, 5vw, 3.5rem);
+  max-width: min(1180px, 92%);
+  margin: clamp(1.25rem, 3.5vh, 2rem) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kano-hero__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 180ms ease;
+}
+
+.kano-hero__item-graphic {
+  display: block;
+  width: auto;
+}
+
+.kano-hero__item-label {
+  font-size: clamp(0.62rem, 1.1vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  opacity: 0.65;
+}
+
+/* Each specimen gets its own size, tilt and vertical seat — noticeably
+   large now (roughly 180-230px on a 1440px desktop) but staggered rather
+   than aligned to one baseline or one shared scale. */
+
+.kano-hero__item--tomato {
+  transform: translateY(10px) rotate(-3deg);
+}
+.kano-hero__item-graphic--tomato {
+  height: clamp(120px, 14vw, 210px);
+}
+
+.kano-hero__item--potato {
+  transform: translateY(-8px) rotate(6deg);
+}
+.kano-hero__item-graphic--potato {
+  height: clamp(100px, 11vw, 165px);
+}
+
+.kano-hero__item--carrot {
+  transform: translateY(-16px) rotate(-7deg);
+}
+.kano-hero__item-graphic--carrot {
+  height: clamp(140px, 15.5vw, 225px);
+}
+
+.kano-hero__item--corn {
+  transform: translateY(4px) rotate(5deg);
+}
+.kano-hero__item-graphic--corn {
+  height: clamp(140px, 15.5vw, 225px);
+}
+
+.kano-hero__item--eggplant {
+  transform: translateY(-4px) rotate(-4deg);
+}
+.kano-hero__item-graphic--eggplant {
+  height: clamp(130px, 14.5vw, 210px);
+}
+
+.kano-hero__item--tomato .kano-hero__item-label { transform: rotate(1deg); }
+.kano-hero__item--carrot .kano-hero__item-label { transform: rotate(-1deg); }
+.kano-hero__item--eggplant .kano-hero__item-label { transform: rotate(1deg); }
+
+/* ---------- tiny hover ---------- */
+
+.kano-hero__item:hover {
+  transform: translateY(-3px) rotate(-2deg);
+}
+
+.kano-hero__mark:hover .kano-hero__tomato {
+  transform: rotate(2deg);
+}
+
+.kano-hero__tomato {
+  transition: transform 180ms ease;
+}
+
+/* ---------- iPad landscape ---------- */
+
+@media (max-width: 1100px) {
+  .kano-hero__mark {
+    width: clamp(210px, min(34vw, 44vh), 320px);
+  }
+  .kano-hero__main {
+    grid-template-columns: minmax(64px, 0.8fr) auto minmax(64px, 0.8fr);
+    column-gap: clamp(0.75rem, 3vw, 1.75rem);
+  }
+  .kano-hero__side {
+    font-size: clamp(0.68rem, 1.6vw, 0.85rem);
+  }
+  .kano-hero__item-graphic--tomato {
+    height: clamp(105px, 15vw, 160px);
+  }
+  .kano-hero__item-graphic--potato {
+    height: clamp(88px, 12vw, 130px);
+  }
+  .kano-hero__item-graphic--carrot,
+  .kano-hero__item-graphic--corn {
+    height: clamp(120px, 17vw, 175px);
+  }
+  .kano-hero__item-graphic--eggplant {
+    height: clamp(110px, 15.5vw, 160px);
+  }
+}
+
+/* ---------- iPad portrait & below: stack the side copy ---------- */
+
+@media (max-width: 900px) {
+  /* Below the 3-column layout, .kano-hero__main no longer needs flex:1 to
+     center a single row — letting it grow still (with 3 stacked auto rows)
+     was dumping all of the section's leftover vertical space into one
+     empty band. Sizing main to its own content and centering the whole
+     stack instead keeps the spacing even. */
+  .kano-hero {
+    justify-content: center;
+  }
+  .kano-hero__main {
+    flex: none;
+    width: 100%;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    row-gap: 1.25rem;
+  }
+  .kano-hero__side--left,
+  .kano-hero__side--right {
+    justify-self: stretch;
+    margin-top: 0;
+  }
+  .kano-hero__side--left {
+    text-align: left;
+  }
+  .kano-hero__side--right {
+    text-align: right;
+    order: 3;
+  }
+  .kano-hero__centerpiece {
+    order: 2;
+  }
+  .kano-hero__mark {
+    width: clamp(230px, min(48vw, 40vh), 320px);
+  }
+}
+
+/* ---------- mobile ---------- */
+
+@media (max-width: 560px) {
+  .kano-hero {
+    padding: 1rem 0.85rem 2rem;
+  }
+  .kano-hero__mark {
+    width: clamp(200px, min(64vw, 40vh), 270px);
+  }
+  .kano-hero__letter {
+    font-size: clamp(2.6rem, 13vw, 4.6rem);
+  }
+  .kano-hero__lineup {
+    gap: 0.85rem 1.25rem;
+  }
+  .kano-hero__item-graphic--tomato {
+    height: clamp(76px, 20vw, 110px);
+  }
+  .kano-hero__item-graphic--potato {
+    height: clamp(64px, 16vw, 90px);
+  }
+  .kano-hero__item-graphic--carrot,
+  .kano-hero__item-graphic--corn {
+    height: clamp(90px, 23vw, 125px);
+  }
+  .kano-hero__item-graphic--eggplant {
+    height: clamp(82px, 21vw, 115px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kano-hero__item,
+  .kano-hero__tomato {
+    transition: none;
+  }
+}

@@ -1,0 +1,12 @@
+.carrot {
+  display: block;
+  overflow: visible;
+}
+
+.carrot__body {
+  fill: var(--kano-orange);
+}
+
+.carrot__leaf {
+  fill: var(--kano-blue);
+}

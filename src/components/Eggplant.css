@@ -1,0 +1,12 @@
+.eggplant {
+  display: block;
+  overflow: visible;
+}
+
+.eggplant__body {
+  fill: var(--kano-purple);
+}
+
+.eggplant__stem {
+  fill: var(--kano-blue);
+}

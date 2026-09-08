@@ -1,0 +1,321 @@
+.cast-grid {
+  background: var(--cast-green);
+  padding: clamp(60px, 8vw, 100px) clamp(20px, 5vw, 60px) 90px;
+}
+
+.cast-grid__intro {
+  max-width: 640px;
+  margin: 0 auto 56px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.cast-grid.is-in-view .cast-grid__intro {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cast-grid__intro h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  color: var(--cast-ink);
+  margin: 0 0 12px;
+}
+
+.cast-grid__intro p {
+  font-family: var(--font-body);
+  color: var(--cast-ink);
+  font-size: 1.05rem;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* ---- editorial wall: a 6-column grid, cards span 2/3/6 columns so 2-3
+   faces sit comfortably per row on desktop, with a light vertical stagger
+   for rhythm instead of a uniform product grid. ---- */
+.cast-grid__wall {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(28px, 4vw, 64px) clamp(20px, 3vw, 40px);
+}
+
+.cast-grid__slot {
+  opacity: 0;
+  /* kept smaller than the tightest row gap (24px on mobile) so a card
+     mid-reveal can never transiently overlap the next one below it. */
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+.cast-grid.is-in-view .cast-grid__slot {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cast-grid__slot--lg {
+  grid-column: span 3;
+  margin-top: var(--offset, 0);
+}
+
+.cast-grid__slot--md {
+  grid-column: span 2;
+  margin-top: var(--offset, 0);
+}
+
+.cast-grid__slot--full {
+  grid-column: 1 / -1;
+}
+
+/* ---- the card itself: the ring is the primary image, sitting on its own
+   "stage" (a flat tonal disc — no gradient, just a darker paper shade so
+   the object has a surface to sit on). The character drops down to a
+   small "worn by" portrait underneath — present, but no longer the whole
+   card. ---- */
+.cast-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cast-card__hit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  text-align: center;
+  padding: clamp(18px, 2vw, 26px) 16px clamp(14px, 1.5vw, 20px);
+  border: 3px solid var(--cast-ink);
+  border-radius: 18px;
+  background: var(--cast-paper);
+  cursor: pointer;
+}
+
+.cast-card__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+.cast-card__stage::before {
+  content: '';
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  border: 2px dashed rgba(20, 20, 15, 0.18);
+}
+
+.cast-card__ring {
+  position: relative;
+  z-index: 1;
+  width: 62%;
+  max-width: 190px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cast-card--lg .cast-card__ring {
+  width: 58%;
+}
+
+.cast-card--md .cast-card__ring {
+  width: 68%;
+}
+
+@media (hover: hover) {
+  .cast-card__hit:hover .cast-card__ring {
+    transform: rotate(-8deg) scale(1.08);
+  }
+}
+
+.cast-card.is-active .cast-card__ring {
+  transform: rotate(-8deg) scale(1.08);
+}
+
+.cast-card__wearer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding-top: 10px;
+  border-top: 2px solid rgba(20, 20, 15, 0.14);
+  text-align: left;
+}
+
+.cast-card__face {
+  flex: none;
+  width: 40px;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) {
+  .cast-card__hit:hover .cast-card__face {
+    transform: rotate(-6deg) scale(1.1);
+  }
+}
+
+.cast-card.is-active .cast-card__face {
+  transform: rotate(-6deg) scale(1.1);
+}
+
+.cast-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.cast-card__name {
+  font-family: var(--font-accent);
+  font-size: 1.05rem;
+  color: var(--cast-ink);
+  opacity: 0.75;
+}
+
+.cast-card__product {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--cast-ink);
+  transition: opacity 0.2s ease;
+}
+
+.cast-card__price {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--cast-ink);
+  opacity: 0.7;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .cast-card__hit:hover .cast-card__price {
+    opacity: 1;
+    color: var(--cast-green);
+  }
+}
+
+.cast-card.is-active .cast-card__price {
+  opacity: 1;
+  color: var(--cast-green);
+}
+
+.cast-card__view {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cast-ink);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.cast-card__view span {
+  transition: transform 0.2s ease;
+}
+
+@media (hover: hover) {
+  .cast-card:hover .cast-card__view,
+  .cast-card:focus-within .cast-card__view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cast-card.is-active .cast-card__view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cast-card__view:hover span {
+  transform: translateX(3px);
+}
+
+/* ---- Sable's closing spread: ring stage + wearer strip sit side by
+   side, full width, instead of stacked ---- */
+.cast-grid__slot--full .cast-card__hit {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  gap: clamp(24px, 5vw, 56px);
+  padding: clamp(24px, 4vw, 40px);
+}
+
+.cast-grid__slot--full .cast-card__stage {
+  flex: none;
+  width: clamp(170px, 22vw, 260px);
+  height: clamp(170px, 22vw, 260px);
+}
+
+.cast-grid__slot--full .cast-card__stage::before {
+  inset: 4%;
+}
+
+.cast-grid__slot--full .cast-card__ring {
+  width: 74%;
+}
+
+.cast-grid__slot--full .cast-card__wearer {
+  flex: none;
+  width: auto;
+  border-top: none;
+  padding-top: 0;
+}
+
+.cast-grid__slot--full .cast-card__view {
+  margin-top: 14px;
+}
+
+@media (max-width: 1023px) {
+  .cast-grid__wall {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cast-grid__slot--lg,
+  .cast-grid__slot--md {
+    grid-column: span 1;
+    margin-top: 0;
+  }
+
+  .cast-grid__slot--full .cast-card__hit {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .cast-grid__slot--full .cast-card__stage {
+    width: 56%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .cast-grid__slot--full .cast-card__wearer {
+    width: 100%;
+    border-top: 2px solid rgba(20, 20, 15, 0.14);
+    padding-top: 10px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .cast-grid__wall {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

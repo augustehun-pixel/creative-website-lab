@@ -1,0 +1,253 @@
+.cast-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 20, 15, 0.68);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: cast-modal-fade 0.2s ease;
+}
+
+@keyframes cast-modal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cast-modal__panel {
+  position: relative;
+  width: min(780px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(20px, 3vw, 40px);
+  background: var(--cast-paper);
+  border: 3px solid var(--cast-ink);
+  border-radius: 20px;
+  padding: clamp(24px, 4vw, 44px);
+  animation: cast-modal-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cast-modal-pop {
+  from {
+    transform: scale(0.94) translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.cast-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--cast-ink);
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* ---- the ring is the hero: a big stage with the same dashed-pedestal
+   language as the grid cards, and a slow, gentle tilt — like someone
+   turning the piece over to catch the light, not a spinning logo. ---- */
+.cast-modal__visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+}
+
+.cast-modal__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 320px;
+}
+
+.cast-modal__stage::before {
+  content: '';
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  border: 2px dashed rgba(20, 20, 15, 0.18);
+}
+
+.cast-modal__ring {
+  position: relative;
+  z-index: 1;
+  width: 78%;
+  animation: cast-ring-tilt 6s ease-in-out infinite;
+}
+
+.cast-modal__stage:hover .cast-modal__ring {
+  animation-play-state: paused;
+}
+
+@keyframes cast-ring-tilt {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cast-modal__ring {
+    animation: none;
+  }
+}
+
+.cast-modal__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cast-modal__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.4vw, 2.2rem);
+  margin: 0;
+  color: var(--cast-ink);
+}
+
+.cast-modal__wearer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  opacity: 0.6;
+  margin: 4px 0 10px;
+}
+
+.cast-modal__face {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.cast-modal__story {
+  font-family: var(--font-accent);
+  font-size: 1.1rem;
+  color: var(--cast-ink);
+  margin: 0;
+}
+
+.cast-modal__spec {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  margin: 14px 0 0;
+}
+
+.cast-modal__motif {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin: 3px 0 0;
+}
+
+.cast-modal__price {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 12px 0 0;
+}
+
+.cast-modal__sizes {
+  margin-top: 16px;
+}
+
+.cast-modal__sizes-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+  margin-bottom: 8px;
+}
+
+.cast-modal__size-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cast-modal__size {
+  min-width: 40px;
+  padding: 8px 0;
+  border: 2px solid var(--cast-ink);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.cast-modal__size.is-selected {
+  background: var(--cast-ink);
+  color: var(--cast-paper);
+}
+
+.cast-modal__add {
+  margin-top: 18px;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 999px;
+  background: var(--cast-green);
+  color: var(--cast-ink);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.cast-modal__add:hover {
+  transform: scale(1.03);
+}
+
+.cast-modal__note {
+  margin: 14px 0 0;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+  .cast-modal__panel {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .cast-modal__wearer {
+    justify-content: center;
+  }
+
+  .cast-modal__sizes-label {
+    text-align: center;
+  }
+
+  .cast-modal__size-list {
+    justify-content: center;
+  }
+}

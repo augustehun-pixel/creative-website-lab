@@ -1,45 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&family=Caveat:wght@600;700&display=swap');
 
 :root {
-  --yellow: #f4c41d;
-  --yellow-deep: #ddb000;
-  --black: #18130b;
-  --cream: #fff6e2;
-  --flavor-mango: #ff9d3d;
-  --flavor-pistachio: #98b25f;
-  --font-display: 'Baloo 2', system-ui, sans-serif;
+  /* CAST — one green, ink black and warm paper. Every section reuses these
+     three so the site reads as one consistent world, not a mix of pages. */
+  --cast-green: #4e9d58;
+  --cast-ink: #14140f;
+  --cast-paper: #f6f2e6;
+  /* two flat neutrals for LOOP's silver rings — a lit face and a shadow
+     face, no gradient. Placed as two solid shapes side by side, this pair
+     is what makes a flat SVG donut read as a rounded metal object. */
+  --loop-silver: #e6e6dd;
+  --loop-silver-shadow: #a8a89c;
 
-  /* Kano design study — a separate, intentionally small palette so every
-     shape (type + produce) reads as one consistent poster, not a mix. */
-  --kano-cream: #faf1de;
-  --kano-red: #e64328;
-  --kano-red-deep: #b52e19;
-  --kano-yellow: #f6c445;
-  --kano-yellow-deep: #dda61f;
-  --kano-orange: #f0792a;
-  --kano-orange-deep: #c85a18;
-  --kano-blue: #2e5fd9;
-  --kano-blue-deep: #1e3fa0;
-  --kano-purple: #7a3fa0;
-  --kano-purple-deep: #582c76;
-  --kano-black: #1c1712;
-  --font-kano: 'Fredoka', system-ui, sans-serif;
+  --font-display: 'Archivo Black', system-ui, sans-serif;
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
+  --font-accent: 'Caveat', cursive;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px; /* clears the sticky nav when jumping to an anchor */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
-  background: var(--yellow);
-  color: var(--black);
-  /* Belongs on the real scroll root, not an inner wrapper — overflow-x
-     on a nested div forces its overflow-y to "auto", which turns that
-     div into an unintended scroll container and silently breaks
-     position: sticky for anything inside it (used by the melt stage). */
+  font-family: var(--font-body);
+  background: var(--cast-paper);
+  color: var(--cast-ink);
   overflow-x: hidden;
 }
 
@@ -50,4 +47,8 @@ button {
   padding: 0;
   color: inherit;
   cursor: pointer;
+}
+
+a {
+  color: inherit;
 }

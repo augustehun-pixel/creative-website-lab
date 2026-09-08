@@ -1,0 +1,20 @@
+.cast-footer {
+  background: var(--cast-ink);
+  color: var(--cast-paper);
+  text-align: center;
+  padding: 30px 20px 40px;
+  border-top: 2px solid var(--cast-green);
+}
+
+.cast-footer__mark {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin: 0 0 6px;
+}
+
+.cast-footer__line {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  opacity: 0.55;
+  margin: 0;
+}

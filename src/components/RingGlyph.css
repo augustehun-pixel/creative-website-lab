@@ -1,0 +1,67 @@
+.ring-glyph {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* closed-shape metal: a shadow-tone base + a light-tone copy shifted up a
+   few px — the sliver of shadow left peeking out underneath is what reads
+   as "rounded metal," with no gradient involved. */
+.rg-shadow {
+  fill: var(--loop-silver-shadow);
+  stroke: var(--cast-ink);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.rg-light {
+  fill: var(--loop-silver);
+  stroke: var(--cast-ink);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+/* open-shape metal (twist, signet shank, coil): same lit/shadow pairing,
+   but as two overlapping strokes instead of two filled donuts. */
+.rg-coil-shadow {
+  fill: none;
+  stroke: var(--loop-silver-shadow);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.rg-coil-light {
+  fill: none;
+  stroke: var(--loop-silver);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.rg-engrave {
+  fill: none;
+  stroke: var(--cast-ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.rg-oxidized-groove {
+  fill: none;
+  stroke: var(--cast-ink);
+  stroke-width: 5;
+  stroke-dasharray: 1.5 5;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.rg-dot {
+  fill: var(--cast-ink);
+  opacity: 0.45;
+}
+
+.rg-highlight {
+  fill: none;
+  stroke: var(--cast-paper);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.9;
+}

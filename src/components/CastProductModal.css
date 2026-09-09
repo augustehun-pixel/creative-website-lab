@@ -21,11 +21,14 @@
 
 .cast-modal__panel {
   position: relative;
-  width: min(780px, 100%);
+  width: min(860px, 100%);
   max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
+  /* the stage carries the product now — give it clearly more room than
+     the info column, not a near-even split */
+  grid-template-columns: 1.35fr 1fr;
   gap: clamp(20px, 3vw, 40px);
   background: var(--cast-paper);
   border: 3px solid var(--cast-ink);
@@ -61,8 +64,10 @@
    turning the piece over to catch the light, not a spinning logo. ---- */
 .cast-modal__visual {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 14px;
   min-height: 220px;
 }
 
@@ -72,9 +77,11 @@
   place-items: center;
   width: 100%;
   aspect-ratio: 1;
-  max-width: 320px;
+  max-width: clamp(260px, 30vw, 400px);
 }
 
+/* the "product stage": a dashed specimen ring plus a solid ground arc, as
+   if the piece were set down on a small round tray to be looked over */
 .cast-modal__stage::before {
   content: '';
   position: absolute;
@@ -83,10 +90,49 @@
   border: 2px dashed rgba(20, 20, 15, 0.18);
 }
 
+.cast-modal__stage::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 13%;
+  height: 40%;
+  border-bottom: 2px solid rgba(20, 20, 15, 0.4);
+  border-radius: 50%;
+}
+
+/* Object mode: one ring, centered, untouched. Worn mode keeps it as one
+   whole instance too — every ring type's own real silhouette (signet
+   plate, coil, crossed stack...) survives intact — just smaller and
+   sitting in front of the hand, with its hole rendered transparent (via
+   RingGlyph's `worn` prop) so the hand shows through the opening instead
+   of a dark disc plugging it. A splitting clip-path was tried and
+   dropped: it divides by raw stage position, which has nothing to do
+   with which part of a given ring type is its "face" — it hid Vantage's
+   whole signet plate behind the hand. */
+.cast-modal__ring-mount {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* worn: the ring reads at its true, smaller scale against the hand and
+   settles onto the finger's shaft — the size story, not just a costume
+   swap. The shaft is clean between the fingertip and the valley where
+   the two fingers meet (~54% down the shared stage coordinate space);
+   translateY(4%) used to drop the ring almost exactly onto that valley,
+   where the hand's two inner outlines sit only a few px apart and read
+   as a solid dark blob instead of a finger. -12% lands it mid-shaft. */
+.cast-modal__stage.is-worn .cast-modal__ring-mount {
+  transform: translateY(-12%) scale(0.6);
+}
+
 .cast-modal__ring {
   position: relative;
-  z-index: 1;
-  width: 78%;
+  width: 84%;
   animation: cast-ring-tilt 6s ease-in-out infinite;
 }
 
@@ -107,6 +153,197 @@
 @media (prefers-reduced-motion: reduce) {
   .cast-modal__ring {
     animation: none;
+  }
+}
+
+/* ---- "Worn": a minimal two-finger hand in the same ink-outline +
+   paper-fill language as the character faces — never a photo, never
+   more visually loud than the ring, which still sits in front of it. ---- */
+.cast-modal__hand {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(16px) scale(0.94);
+  transition: opacity 0.4s ease 0.05s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.05s;
+}
+
+.cast-modal__stage.is-worn .cast-modal__hand {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.wh-fill {
+  fill: var(--cast-paper);
+  stroke: var(--cast-ink);
+  stroke-width: 3;
+}
+
+.wh-crease {
+  fill: none;
+  stroke: var(--cast-ink);
+  stroke-width: 2;
+  opacity: 0.35;
+}
+
+/* a quiet cue, behind the hand, that the band keeps going around the
+   back of the finger — generic on purpose (not this ring's real
+   silhouette) so it never fights any particular ring type's shape. */
+.cast-modal__back-band {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transform: translateY(16px) scale(0.94);
+  transition: opacity 0.4s ease 0.05s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.05s;
+}
+
+.cast-modal__stage.is-worn .cast-modal__back-band {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.bbh-stroke {
+  fill: none;
+  stroke: var(--cast-ink);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.3;
+}
+
+/* the core interaction: a single sliding switch, not two separate flat
+   buttons — its own small storytelling moment when it flips. */
+.cast-modal__view-toggle {
+  position: relative;
+  display: inline-flex;
+  padding: 3px;
+  border: 2px solid var(--cast-ink);
+  border-radius: 999px;
+}
+
+.cast-modal__view-toggle::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  height: calc(100% - 6px);
+  background: var(--cast-ink);
+  border-radius: 999px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cast-modal__view-toggle.is-worn::before {
+  transform: translateX(100%);
+}
+
+.cast-modal__view-toggle button {
+  position: relative;
+  z-index: 1;
+  min-width: 88px;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: transparent;
+  color: var(--cast-ink);
+  cursor: pointer;
+  transition: color 0.35s ease;
+}
+
+.cast-modal__view-toggle button.is-active {
+  color: var(--cast-paper);
+}
+
+/* ---- sketch-style annotations: hand-labeled leader lines pointing at the
+   ring's motif and finish, revealed automatically when the modal opens
+   (not hover-gated) so the "closer look" works on touch too. ---- */
+.cast-modal__annotations {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.cast-modal__annotation {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 46%;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: cast-annotation-in 0.4s ease forwards;
+}
+
+.cast-modal__annotation--a {
+  top: 6%;
+  right: 2%;
+  animation-delay: 0.5s;
+}
+
+.cast-modal__annotation--b {
+  bottom: 8%;
+  left: 2%;
+  flex-direction: row-reverse;
+  animation-delay: 0.7s;
+}
+
+.cast-modal__annotation-dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--cast-ink);
+  opacity: 0.55;
+}
+
+.cast-modal__annotation-line {
+  width: 22px;
+  height: 1.5px;
+  flex: none;
+  background: var(--cast-ink);
+  opacity: 0.5;
+}
+
+.cast-modal__annotation-label {
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  line-height: 1.1;
+  color: var(--cast-ink);
+}
+
+@keyframes cast-annotation-in {
+  to {
+    opacity: 0.85;
+    transform: translateY(0);
+  }
+}
+
+/* worn-mode's single callout: the character's face standing in for
+   "whose personality this is," not a construction note — connects the
+   object back to a person without the face becoming the main image. */
+.cast-modal__annotation--worn {
+  bottom: 6%;
+  right: 2%;
+  flex-direction: row-reverse;
+  animation-delay: 0.25s;
+}
+
+.cast-modal__annotation-face {
+  width: 26px;
+  height: 26px;
+  flex: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cast-modal__annotation {
+    animation: none;
+    opacity: 0.85;
   }
 }
 
@@ -249,5 +486,33 @@
 
   .cast-modal__size-list {
     justify-content: center;
+  }
+
+  .cast-modal__annotation {
+    max-width: 40%;
+  }
+
+  .cast-modal__annotation--a {
+    /* the close button sits top-right of the panel on its own small
+       screens; push this well below it instead of nudging sideways */
+    top: 11%;
+    right: 0;
+  }
+
+  .cast-modal__annotation-line {
+    width: 14px;
+  }
+
+  .cast-modal__annotation-label {
+    font-size: 0.85rem;
+  }
+
+  .cast-modal__annotation--worn {
+    right: 8%;
+  }
+
+  .cast-modal__annotation-face {
+    width: 22px;
+    height: 22px;
   }
 }

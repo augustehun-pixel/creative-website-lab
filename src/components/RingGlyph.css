@@ -21,6 +21,26 @@
   stroke-linejoin: round;
 }
 
+/* oxidized finish: swap in a darker, duller shadow tone so the piece reads
+   noticeably less bright than a polished one — texture driven by data. */
+.rg-oxidized .rg-shadow {
+  fill: var(--loop-silver-oxidized);
+}
+
+/* the dark fill behind a ring's cut-out hole — turns a flat "blank"
+   opening into something that reads as looking into a tube. */
+.rg-throat {
+  fill: var(--cast-ink);
+  opacity: 0.3;
+}
+
+/* soft flat shadow under the object, blurred rather than gradient-shaded —
+   just enough to ground the piece on its stage. */
+.rg-cast-shadow {
+  fill: var(--cast-ink);
+  opacity: 0.15;
+}
+
 /* open-shape metal (twist, signet shank, coil): same lit/shadow pairing,
    but as two overlapping strokes instead of two filled donuts. */
 .rg-coil-shadow {
@@ -37,6 +57,15 @@
   stroke-linecap: round;
 }
 
+/* thinner second strand for the twist ring's crossed second wire */
+.rg-coil-shadow--thin {
+  stroke-width: 6;
+}
+
+.rg-coil-light--thin {
+  stroke-width: 4.5;
+}
+
 .rg-engrave {
   fill: none;
   stroke: var(--cast-ink);
@@ -44,13 +73,44 @@
   stroke-linecap: round;
 }
 
-.rg-oxidized-groove {
+/* a recessed channel cut into the metal — a dark groove with a thin lit
+   rim just above it, instead of a decorative dashed line. */
+.rg-groove-dark {
   fill: none;
   stroke: var(--cast-ink);
   stroke-width: 5;
-  stroke-dasharray: 1.5 5;
-  stroke-linecap: round;
-  opacity: 0.85;
+  opacity: 0.5;
+}
+
+.rg-groove-light {
+  fill: none;
+  stroke: var(--loop-silver);
+  stroke-width: 1.5;
+  opacity: 0.8;
+}
+
+.rg-groove-dark--thin {
+  stroke-width: 2;
+}
+
+.rg-groove-light--thin {
+  stroke-width: 1;
+}
+
+/* faint lines hinting at hammered-surface facets */
+.rg-facet {
+  fill: none;
+  stroke: var(--cast-ink);
+  stroke-width: 1;
+  opacity: 0.16;
+}
+
+/* brushed-metal grain, only drawn for finishes that say "brushed" */
+.rg-brushed-line {
+  fill: none;
+  stroke: var(--cast-ink);
+  stroke-width: 1;
+  opacity: 0.12;
 }
 
 .rg-dot {
@@ -64,4 +124,9 @@
   stroke-width: 3;
   stroke-linecap: round;
   opacity: 0.9;
+}
+
+/* matte surfaces don't throw a sharp specular highlight */
+.rg-highlight--muted {
+  opacity: 0.35;
 }

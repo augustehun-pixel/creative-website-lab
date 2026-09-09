@@ -26,7 +26,7 @@ export default function CastCard({ member, index, variant, onOpenRing }) {
         aria-label={`${member.ringName} by ${member.name}, ${price}`}
       >
         <span className="cast-card__stage">
-          <RingGlyph id={member.id} type={member.ringType} className="cast-card__ring" />
+          <RingGlyph id={member.id} type={member.ringType} finish={member.finish} className="cast-card__ring" />
         </span>
         <span className="cast-card__wearer">
           <span className="cast-card__face">

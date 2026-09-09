@@ -11,6 +11,9 @@
      is what makes a flat SVG donut read as a rounded metal object. */
   --loop-silver: #e6e6dd;
   --loop-silver-shadow: #a8a89c;
+  /* darker shadow tone swapped in only for oxidized-finish rings, so an
+     oxidized piece reads visibly darker/duller than a polished one. */
+  --loop-silver-oxidized: #86867a;
 
   --font-display: 'Archivo Black', system-ui, sans-serif;
   --font-body: 'Space Grotesk', system-ui, sans-serif;

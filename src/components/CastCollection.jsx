@@ -20,7 +20,7 @@ export default function CastCollection({ onOpenRing, onAddToBag }) {
           <li className="cast-row" style={{ '--i': i }} key={member.id}>
             <button type="button" className="cast-row__hit" onClick={() => onOpenRing(member.id)}>
               <span className="cast-row__thumb">
-                <RingGlyph id={`shop-${member.id}`} type={member.ringType} />
+                <RingGlyph id={`shop-${member.id}`} type={member.ringType} finish={member.finish} />
               </span>
               <span className="cast-row__names">
                 <strong>{member.ringName}</strong>

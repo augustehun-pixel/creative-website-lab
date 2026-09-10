@@ -5,8 +5,14 @@
 // not copied from any reference site's copy, products, or branding.
 //
 // `accessory: 'none'` keeps CastFace's face-jewelry slot empty on purpose —
-// the ring itself is now rendered separately by RingGlyph, so the product
-// visual is an actual ring, not an earring standing in for one.
+// the character illustration and the product photo are two separate
+// systems now (see ProductImage.jsx): CastFace/RingGlyph stay in the BRAND
+// WORLD (illustration, storytelling), while `images` below is the PRODUCT
+// WORLD slot — real photography paths once they exist. Every slot is
+// `null` today (no real photos yet), which renders an honestly-labeled
+// placeholder instead of a fake photorealistic ring. Drop a real image
+// path into any slot later and that spot starts showing a real photo with
+// no other code changes.
 const CAST = [
   {
     id: 'moss',
@@ -19,6 +25,7 @@ const CAST = [
     ringType: 'band',
     motif: 'plain rounded band',
     finish: 'polished sterling silver',
+    images: { hero: null, angle: null, detail: null, worn: null, lifestyle: null },
     price: 68,
     story: 'quiet and sure — the ring for someone who doesn’t need to say much.',
     sizes: [5, 6, 7, 8, 9],
@@ -34,6 +41,7 @@ const CAST = [
     ringType: 'signet',
     motif: 'flat signet face, single engraved line',
     finish: 'oxidized sterling silver',
+    images: { hero: null, angle: null, detail: null, worn: null, lifestyle: null },
     price: 128,
     story: 'watches the room before she enters it — a flat signet face with one fine engraved line.',
     sizes: [5, 6, 7, 8, 9],
@@ -49,6 +57,7 @@ const CAST = [
     ringType: 'twist',
     motif: 'open, softly twisted band',
     finish: 'polished sterling silver',
+    images: { hero: null, angle: null, detail: null, worn: null, lifestyle: null },
     price: 89,
     story: 'always somewhere between here and a daydream — a softly twisted band.',
     sizes: [5, 6, 7, 8, 9],
@@ -64,6 +73,7 @@ const CAST = [
     ringType: 'stack',
     motif: 'two thin bands, crossed and stacked',
     finish: 'brushed sterling silver',
+    images: { hero: null, angle: null, detail: null, worn: null, lifestyle: null },
     price: 76,
     story: 'first through the door, every time — two thin bands stacked to move as one.',
     sizes: [5, 6, 7, 8, 9],
@@ -79,6 +89,7 @@ const CAST = [
     ringType: 'hammered',
     motif: 'hand-hammered, faceted surface',
     finish: 'matte sterling silver',
+    images: { hero: null, angle: null, detail: null, worn: null, lifestyle: null },
     price: 72,
     story: 'moves like nothing is urgent, because nothing is — a hand-hammered, no-shine surface.',
     sizes: [5, 6, 7, 8, 9],
@@ -92,10 +103,17 @@ const CAST = [
     mood: 'bold',
     ringName: 'Loudline',
     ringType: 'engraved',
-    motif: 'chunky band, one deep oxidized groove',
+    // PILOT PRODUCT — real photo (public/IMG_0940.jpeg) replaces the
+    // fictional placeholder for `hero`. The motif/story clauses below are
+    // updated to match what the real ring actually is (a wide band with
+    // dense engraved script in an oxidized recess), not a redesign — the
+    // ring type, finish, price, and personality all stayed the same
+    // because they already fit.
+    motif: 'wide band, dense engraved script in an oxidized recess',
     finish: 'oxidized sterling silver',
+    images: { hero: '/IMG_0940.jpeg', angle: null, detail: null, worn: null, lifestyle: null },
     price: 118,
-    story: 'wears attention like it’s nothing new — one deep engraved stripe around a chunky band.',
+    story: 'wears attention like it’s nothing new — a wide band engraved edge to edge, no blank space left on it.',
     sizes: [5, 6, 7, 8, 9],
   },
   {
@@ -109,6 +127,7 @@ const CAST = [
     ringType: 'wide',
     motif: 'wide, elongated oval band',
     finish: 'brushed sterling silver',
+    images: { hero: null, angle: null, detail: null, worn: null, lifestyle: null },
     price: 95,
     story: 'gentle, but you feel him coming — a wide, unhurried band.',
     sizes: [5, 6, 7, 8, 9],
@@ -124,6 +143,7 @@ const CAST = [
     ringType: 'coil',
     motif: 'tapered wraparound coil',
     finish: 'polished sterling silver',
+    images: { hero: null, angle: null, detail: null, worn: null, lifestyle: null },
     price: 148,
     story: 'never in a hurry, never where you left it — a band that wraps the finger like a coil.',
     sizes: [5, 6, 7, 8, 9],

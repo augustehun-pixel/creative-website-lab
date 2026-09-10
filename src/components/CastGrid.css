@@ -96,49 +96,50 @@
   border-radius: 18px;
   background: var(--cast-paper);
   cursor: pointer;
+  /* the ring/face SVGs inside are decorative, not separate tap targets —
+     without this, iOS Safari can hit-test a fast tap straight to the SVG
+     and run its own image gesture handling (drag/callout) on it instead
+     of the button's click, which is what was surfacing a native
+     "download this?" prompt instead of opening the product modal. Routing
+     every tap to the button itself fixes that at the source. */
+  touch-action: manipulation;
 }
 
+.cast-card__hit * {
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+}
+
+/* PRODUCT WORLD: a fixed-ratio photo slot, not a floating icon on a
+   specimen stage — real product photography (or its honest placeholder)
+   fills this box edge to edge, ready to drop a real photo in later. */
 .cast-card__stage {
   position: relative;
-  display: grid;
-  place-items: center;
   width: 100%;
-  flex: 1;
-  min-height: 0;
-}
-
-.cast-card__stage::before {
-  content: '';
-  position: absolute;
-  inset: 6%;
-  border-radius: 50%;
-  border: 2px dashed rgba(20, 20, 15, 0.18);
+  aspect-ratio: 1;
+  flex: none;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 .cast-card__ring {
-  position: relative;
-  z-index: 1;
-  width: 62%;
-  max-width: 190px;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.cast-card--lg .cast-card__ring {
-  width: 58%;
-}
-
-.cast-card--md .cast-card__ring {
-  width: 68%;
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* a light zoom, not a spin — a real product photo doesn't tilt like an
+     illustration would */
+  transition: transform 0.3s ease;
 }
 
 @media (hover: hover) {
   .cast-card__hit:hover .cast-card__ring {
-    transform: rotate(-8deg) scale(1.08);
+    transform: scale(1.05);
   }
 }
 
 .cast-card.is-active .cast-card__ring {
-  transform: rotate(-8deg) scale(1.08);
+  transform: scale(1.05);
 }
 
 .cast-card__wearer {
@@ -214,6 +215,7 @@
   align-items: center;
   gap: 4px;
   margin-top: 10px;
+  touch-action: manipulation;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.75rem;
@@ -261,15 +263,7 @@
 .cast-grid__slot--full .cast-card__stage {
   flex: none;
   width: clamp(170px, 22vw, 260px);
-  height: clamp(170px, 22vw, 260px);
-}
-
-.cast-grid__slot--full .cast-card__stage::before {
-  inset: 4%;
-}
-
-.cast-grid__slot--full .cast-card__ring {
-  width: 74%;
+  aspect-ratio: 1;
 }
 
 .cast-grid__slot--full .cast-card__wearer {

@@ -1,0 +1,290 @@
+.cast-bag {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 20, 15, 0.68);
+  display: flex;
+  justify-content: flex-end;
+  animation: cast-bag-fade 0.2s ease;
+}
+
+@keyframes cast-bag-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* an edge-anchored drawer, not a centered card like the product modal —
+   same ink/paper/green pieces, deliberately different shape so "bag" never
+   reads as "another product detail screen" */
+.cast-bag__panel {
+  position: relative;
+  width: clamp(320px, 92vw, 420px);
+  height: 100%;
+  max-height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--cast-paper);
+  border-left: 3px solid var(--cast-ink);
+  padding: clamp(20px, 3vw, 28px);
+  animation: cast-bag-slide 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes cast-bag-slide {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cast-bag__panel {
+    animation: none;
+  }
+}
+
+.cast-bag__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 3px solid var(--cast-ink);
+}
+
+.cast-bag__header h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  margin: 0;
+  color: var(--cast-ink);
+}
+
+.cast-bag__close {
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--cast-ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  padding: 4px 6px;
+}
+
+.cast-bag__empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  padding: 40px 10px;
+}
+
+.cast-bag__empty p {
+  font-family: var(--font-accent);
+  font-size: 1.2rem;
+  color: var(--cast-ink);
+  margin: 0;
+}
+
+.cast-bag__empty a {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cast-ink);
+  text-decoration: none;
+}
+
+.cast-bag__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.cast-bag__row {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  grid-template-areas:
+    'thumb info   remove'
+    'thumb qty    price';
+  column-gap: 12px;
+  row-gap: 8px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 2px solid rgba(20, 20, 15, 0.14);
+}
+
+.cast-bag__thumb {
+  grid-area: thumb;
+  width: 52px;
+  height: 52px;
+  align-self: start;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.cast-bag__info {
+  grid-area: info;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cast-bag__name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--cast-ink);
+}
+
+.cast-bag__wearer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-accent);
+  font-size: 0.9rem;
+  color: var(--cast-ink);
+  opacity: 0.75;
+}
+
+.cast-bag__face {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.cast-bag__meta {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.55;
+}
+
+.cast-bag__remove {
+  grid-area: remove;
+  justify-self: end;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cast-ink);
+  opacity: 0.55;
+  cursor: pointer;
+  touch-action: manipulation;
+  padding: 6px 2px;
+  transition: opacity 0.15s ease;
+}
+
+.cast-bag__remove:hover {
+  opacity: 1;
+}
+
+.cast-bag__qty {
+  grid-area: qty;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: 2px solid var(--cast-ink);
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.cast-bag__qty button {
+  min-width: 34px;
+  min-height: 34px;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.cast-bag__qty span {
+  min-width: 20px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.cast-bag__line-price {
+  grid-area: price;
+  justify-self: end;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--cast-ink);
+}
+
+.cast-bag__footer {
+  border-top: 3px solid var(--cast-ink);
+  padding-top: 16px;
+  margin-top: 6px;
+}
+
+.cast-bag__subtotal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--font-body);
+  color: var(--cast-ink);
+}
+
+.cast-bag__subtotal span {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.65;
+}
+
+.cast-bag__subtotal strong {
+  font-size: 1.3rem;
+}
+
+.cast-bag__checkout {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 999px;
+  background: var(--cast-green);
+  color: var(--cast-ink);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.15s ease;
+}
+
+.cast-bag__checkout:hover {
+  transform: scale(1.02);
+}
+
+.cast-bag__note {
+  margin: 12px 0 0;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  opacity: 0.5;
+}
+
+@media (max-width: 480px) {
+  .cast-bag__panel {
+    width: 100vw;
+  }
+}

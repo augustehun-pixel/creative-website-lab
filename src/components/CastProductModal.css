@@ -59,9 +59,11 @@
   z-index: 1;
 }
 
-/* ---- the ring is the hero: a big stage with the same dashed-pedestal
-   language as the grid cards, and a slow, gentle tilt — like someone
-   turning the piece over to catch the light, not a spinning logo. ---- */
+/* ---- PRODUCT WORLD: a real photo gallery, not an illustration stage.
+   The dashed rectangular frame is the one LOOP editorial touch this area
+   keeps — a "specimen sheet" border around the photo, never on top of it —
+   so the surrounding UI still reads as LOOP even once every slot below is
+   a real photograph. ---- */
 .cast-modal__visual {
   display: flex;
   flex-direction: column;
@@ -71,144 +73,66 @@
   min-height: 220px;
 }
 
-.cast-modal__stage {
-  position: relative;
-  display: grid;
-  place-items: center;
+.cast-modal__gallery {
+  width: 100%;
+  max-width: clamp(280px, 32vw, 440px);
+  padding: 14px;
+  border: 2px dashed rgba(20, 20, 15, 0.24);
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+/* a real photo earns more room than a placeholder does — this only kicks
+   in once the active gallery group actually has a real photo in it, so
+   still-fictional products keep their current size exactly as-is. */
+.cast-modal__gallery--featured {
+  max-width: clamp(320px, 40vw, 560px);
+}
+
+.cast-modal__main-photo {
   width: 100%;
   aspect-ratio: 1;
-  max-width: clamp(260px, 30vw, 400px);
+  overflow: hidden;
+  border-radius: 10px;
+  border: 3px solid var(--cast-ink);
 }
 
-/* the "product stage": a dashed specimen ring plus a solid ground arc, as
-   if the piece were set down on a small round tray to be looked over */
-.cast-modal__stage::before {
-  content: '';
-  position: absolute;
-  inset: 4%;
-  border-radius: 50%;
-  border: 2px dashed rgba(20, 20, 15, 0.18);
+.cast-modal__main-photo > * {
+  transition: transform 0.4s ease;
 }
 
-.cast-modal__stage::after {
-  content: '';
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: 13%;
-  height: 40%;
-  border-bottom: 2px solid rgba(20, 20, 15, 0.4);
-  border-radius: 50%;
-}
-
-/* Object mode: one ring, centered, untouched. Worn mode keeps it as one
-   whole instance too — every ring type's own real silhouette (signet
-   plate, coil, crossed stack...) survives intact — just smaller and
-   sitting in front of the hand, with its hole rendered transparent (via
-   RingGlyph's `worn` prop) so the hand shows through the opening instead
-   of a dark disc plugging it. A splitting clip-path was tried and
-   dropped: it divides by raw stage position, which has nothing to do
-   with which part of a given ring type is its "face" — it hid Vantage's
-   whole signet plate behind the hand. */
-.cast-modal__ring-mount {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* worn: the ring reads at its true, smaller scale against the hand and
-   settles onto the finger's shaft — the size story, not just a costume
-   swap. The shaft is clean between the fingertip and the valley where
-   the two fingers meet (~54% down the shared stage coordinate space);
-   translateY(4%) used to drop the ring almost exactly onto that valley,
-   where the hand's two inner outlines sit only a few px apart and read
-   as a solid dark blob instead of a finger. -12% lands it mid-shaft. */
-.cast-modal__stage.is-worn .cast-modal__ring-mount {
-  transform: translateY(-12%) scale(0.6);
-}
-
-.cast-modal__ring {
-  position: relative;
-  width: 84%;
-  animation: cast-ring-tilt 6s ease-in-out infinite;
-}
-
-.cast-modal__stage:hover .cast-modal__ring {
-  animation-play-state: paused;
-}
-
-@keyframes cast-ring-tilt {
-  0%,
-  100% {
-    transform: rotate(-6deg);
-  }
-  50% {
-    transform: rotate(6deg);
+@media (hover: hover) {
+  .cast-modal__main-photo:hover > * {
+    transform: scale(1.03);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cast-modal__ring {
-    animation: none;
-  }
+.cast-modal__thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
 }
 
-/* ---- "Worn": a minimal two-finger hand in the same ink-outline +
-   paper-fill language as the character faces — never a photo, never
-   more visually loud than the ring, which still sits in front of it. ---- */
-.cast-modal__hand {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  opacity: 0;
-  transform: translateY(16px) scale(0.94);
-  transition: opacity 0.4s ease 0.05s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.05s;
+.cast-modal__thumbs button {
+  flex: 1;
+  aspect-ratio: 1;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 2px solid rgba(20, 20, 15, 0.25);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.65;
 }
 
-.cast-modal__stage.is-worn .cast-modal__hand {
+.cast-modal__thumbs button.is-active {
+  border-color: var(--cast-ink);
   opacity: 1;
-  transform: translateY(0) scale(1);
 }
 
-.wh-fill {
-  fill: var(--cast-paper);
-  stroke: var(--cast-ink);
-  stroke-width: 3;
-}
-
-.wh-crease {
-  fill: none;
-  stroke: var(--cast-ink);
-  stroke-width: 2;
-  opacity: 0.35;
-}
-
-/* a quiet cue, behind the hand, that the band keeps going around the
-   back of the finger — generic on purpose (not this ring's real
-   silhouette) so it never fights any particular ring type's shape. */
-.cast-modal__back-band {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  opacity: 0;
-  transform: translateY(16px) scale(0.94);
-  transition: opacity 0.4s ease 0.05s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.05s;
-}
-
-.cast-modal__stage.is-worn .cast-modal__back-band {
+.cast-modal__thumbs button:hover {
   opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.bbh-stroke {
-  fill: none;
-  stroke: var(--cast-ink);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  opacity: 0.3;
 }
 
 /* the core interaction: a single sliding switch, not two separate flat
@@ -259,92 +183,15 @@
   color: var(--cast-paper);
 }
 
-/* ---- sketch-style annotations: hand-labeled leader lines pointing at the
-   ring's motif and finish, revealed automatically when the modal opens
-   (not hover-gated) so the "closer look" works on touch too. ---- */
-.cast-modal__annotations {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.cast-modal__annotation {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  max-width: 46%;
-  opacity: 0;
-  transform: translateY(4px);
-  animation: cast-annotation-in 0.4s ease forwards;
-}
-
-.cast-modal__annotation--a {
-  top: 6%;
-  right: 2%;
-  animation-delay: 0.5s;
-}
-
-.cast-modal__annotation--b {
-  bottom: 8%;
-  left: 2%;
-  flex-direction: row-reverse;
-  animation-delay: 0.7s;
-}
-
-.cast-modal__annotation-dot {
-  width: 6px;
-  height: 6px;
-  flex: none;
-  border-radius: 50%;
-  background: var(--cast-ink);
-  opacity: 0.55;
-}
-
-.cast-modal__annotation-line {
-  width: 22px;
-  height: 1.5px;
-  flex: none;
-  background: var(--cast-ink);
-  opacity: 0.5;
-}
-
-.cast-modal__annotation-label {
+/* stands in for the toggle when object/worn photography are in different
+   states (one real, one not) — a quiet line, not a control competing with
+   the real photo for attention. */
+.cast-modal__worn-note {
+  margin: 0;
   font-family: var(--font-accent);
-  font-size: 1rem;
-  line-height: 1.1;
+  font-size: 0.9rem;
   color: var(--cast-ink);
-}
-
-@keyframes cast-annotation-in {
-  to {
-    opacity: 0.85;
-    transform: translateY(0);
-  }
-}
-
-/* worn-mode's single callout: the character's face standing in for
-   "whose personality this is," not a construction note — connects the
-   object back to a person without the face becoming the main image. */
-.cast-modal__annotation--worn {
-  bottom: 6%;
-  right: 2%;
-  flex-direction: row-reverse;
-  animation-delay: 0.25s;
-}
-
-.cast-modal__annotation-face {
-  width: 26px;
-  height: 26px;
-  flex: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cast-modal__annotation {
-    animation: none;
-    opacity: 0.85;
-  }
+  opacity: 0.45;
 }
 
 .cast-modal__info {
@@ -360,6 +207,9 @@
   color: var(--cast-ink);
 }
 
+/* character stays in the info column, but now as a signature after the
+   purchase-relevant facts (price/material/detail/size/add-to-bag) — a
+   thin rule marks the shift from "buying this" to "whose it is." */
 .cast-modal__wearer {
   display: flex;
   align-items: center;
@@ -367,7 +217,9 @@
   font-family: var(--font-body);
   font-size: 0.78rem;
   opacity: 0.6;
-  margin: 4px 0 10px;
+  margin: 22px 0 8px;
+  padding-top: 16px;
+  border-top: 2px solid rgba(20, 20, 15, 0.14);
 }
 
 .cast-modal__face {
@@ -389,7 +241,7 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   opacity: 0.7;
-  margin: 14px 0 0;
+  margin: 10px 0 0;
 }
 
 .cast-modal__motif {
@@ -403,7 +255,7 @@
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 1.3rem;
-  margin: 12px 0 0;
+  margin: 6px 0 0;
 }
 
 .cast-modal__sizes {
@@ -464,10 +316,10 @@
 }
 
 .cast-modal__note {
-  margin: 14px 0 0;
+  margin: 10px 0 0;
   font-family: var(--font-body);
-  font-size: 0.72rem;
-  opacity: 0.5;
+  font-size: 0.66rem;
+  opacity: 0.4;
 }
 
 @media (max-width: 640px) {
@@ -486,33 +338,5 @@
 
   .cast-modal__size-list {
     justify-content: center;
-  }
-
-  .cast-modal__annotation {
-    max-width: 40%;
-  }
-
-  .cast-modal__annotation--a {
-    /* the close button sits top-right of the panel on its own small
-       screens; push this well below it instead of nudging sideways */
-    top: 11%;
-    right: 0;
-  }
-
-  .cast-modal__annotation-line {
-    width: 14px;
-  }
-
-  .cast-modal__annotation-label {
-    font-size: 0.85rem;
-  }
-
-  .cast-modal__annotation--worn {
-    right: 8%;
-  }
-
-  .cast-modal__annotation-face {
-    width: 22px;
-    height: 22px;
   }
 }

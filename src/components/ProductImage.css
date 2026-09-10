@@ -1,0 +1,57 @@
+/* PRODUCT WORLD: a real photo (or its honest placeholder) always fills its
+   parent completely — every parent context (card stage, row thumb, modal
+   gallery) decides the shape/size, this component just fills it. */
+.product-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.product-image--placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--cast-paper);
+  border: 2px dashed rgba(20, 20, 15, 0.24);
+  box-sizing: border-box;
+  padding: 10%;
+  text-align: center;
+}
+
+.product-image__sketch {
+  width: 38%;
+  opacity: 0.28;
+  filter: grayscale(1);
+}
+
+.product-image__label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--cast-ink);
+  opacity: 0.5;
+  line-height: 1.3;
+}
+
+.product-image__sublabel {
+  font-family: var(--font-accent);
+  font-size: 0.85rem;
+  color: var(--cast-ink);
+  opacity: 0.4;
+}
+
+.product-image--compact {
+  padding: 6%;
+  gap: 0;
+}
+
+.product-image--compact .product-image__label {
+  font-size: 0.58rem;
+  opacity: 0.45;
+}

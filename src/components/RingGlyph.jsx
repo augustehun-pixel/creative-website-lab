@@ -91,6 +91,41 @@ const isOxidized = (finish = '') => finish.includes('oxidized')
 const isMatte = (finish = '') => finish.includes('matte')
 const isBrushed = (finish = '') => finish.includes('brushed')
 
+// Every ring shares the same wobble-filter technique, but not the same
+// amount of it — how crisp or roughed-over a line reads is itself a
+// personality cue, not a uniform "handmade" setting applied to all eight.
+// Quiet/precise characters (Moss, Wren) stay closest to a true line; bold
+// or restless ones (Baz, Arlo, Pip) read rougher, more worked-over. `dents`
+// adds a few real tool-mark pits — reserved for Baz, the one ring whose
+// story ("wears attention like it's nothing new") calls for a surface that
+// already looks lived-in, not fresh off the bench.
+const CHARACTER = {
+  band: { wobble: 1.7 }, // Moss — calm and sure, the crispest line on the site
+  signet: { wobble: 1.1 }, // Wren — sharp and watchful, almost no wobble at all
+  twist: { wobble: 2.8 }, // Arlo — dreamy, the loosest line on the site
+  stack: { wobble: 2.5 }, // Pip — eager, a little overeager
+  hammered: { wobble: 2.2 }, // Juno — already carries its own facet texture
+  engraved: { wobble: 3, dents: 3 }, // Baz — bold, heaviest, roughest; real tool marks
+  wide: { wobble: 2 }, // Remy — gentle but substantial
+  coil: { wobble: 2.4 }, // Sable — sly and sinuous
+}
+
+// A few small irregular dark pits along the band edge — the same rg-dot
+// language already used for Juno's hammered facets, reused here for a ring
+// whose personality calls for a more worked-over surface.
+function ToolMarks({ seed, count, cx, cy, radius }) {
+  return (
+    <>
+      {Array.from({ length: count }).map((_, i) => {
+        const angle = (i / count) * Math.PI * 2 + jitter(seed, i + 30, 1)
+        const x = cx + Math.cos(angle) * radius + jitter(seed, i + 40, 2)
+        const y = cy + Math.sin(angle) * radius + jitter(seed, i + 50, 2)
+        return <circle key={i} cx={x} cy={y} r="1.3" className="rg-dot" />
+      })}
+    </>
+  )
+}
+
 export default function RingGlyph({ id, type = 'band', finish = '', worn = false, className = '' }) {
   const filterId = `ring-wobble-${id}`
   const blurId = `ring-blur-${id}`
@@ -102,6 +137,7 @@ export default function RingGlyph({ id, type = 'band', finish = '', worn = false
   const oxidized = isOxidized(finish)
   const matte = isMatte(finish)
   const brushed = isBrushed(finish)
+  const character = CHARACTER[type] || CHARACTER.band
 
   let body = null
   let throat = null
@@ -166,9 +202,11 @@ export default function RingGlyph({ id, type = 'band', finish = '', worn = false
         <>
           <path d={shank} className="rg-coil-shadow" />
           <path d={shank} className="rg-coil-light" transform="translate(0,-2.5)" />
+          {/* rx kept tight (not rounded) — Wren reads sharp and watchful,
+              so her signet plate stays angular instead of soft */}
           <g transform={`rotate(${-5 + jitter(seed, 7, 2)} 50 38)`} className={oxidized ? 'rg-oxidized' : ''}>
-            <rect x="29" y="22" width="42" height="30" rx="7" className="rg-shadow" transform="translate(4,6)" />
-            <rect x="29" y="22" width="42" height="30" rx="7" className="rg-light" />
+            <rect x="29" y="22" width="42" height="30" rx="3" className="rg-shadow" transform="translate(4,6)" />
+            <rect x="29" y="22" width="42" height="30" rx="3" className="rg-light" />
             <path d="M37,37.5 L63,37.5" className="rg-groove-dark rg-groove-dark--thin" />
             <path d="M37,36 L63,36" className="rg-groove-light rg-groove-light--thin" />
           </g>
@@ -228,6 +266,7 @@ export default function RingGlyph({ id, type = 'band', finish = '', worn = false
           <Metal d={bandPath(50, 54, 42, 42, 18, 18, offX, offY)} oxidized={oxidized} />
           <circle cx="50" cy="54" r="30" className="rg-groove-dark" />
           <circle cx="50" cy="52.5" r="30" className="rg-groove-light" />
+          {character.dents && <ToolMarks seed={seed} count={character.dents} cx={50} cy={54} radius={38} />}
           <Highlight d="M18,44 A32,32 0 0,1 34,20" />
         </>
       )
@@ -253,7 +292,7 @@ export default function RingGlyph({ id, type = 'band', finish = '', worn = false
       <defs>
         <filter id={filterId} x="-25%" y="-25%" width="150%" height="150%">
           <feTurbulence type="fractalNoise" baseFrequency="0.015 0.025" numOctaves="1" seed={(seed % 40) + 3} result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale={character.wobble} />
         </filter>
         <filter id={blurId} x="-60%" y="-150%" width="220%" height="400%">
           <feGaussianBlur stdDeviation="2" />

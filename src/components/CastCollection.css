@@ -67,11 +67,17 @@
 .cast-row__thumb {
   width: 76px;
   height: 76px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.cast-row__thumb > * {
   transition: transform 0.25s ease;
 }
 
-.cast-row__hit:hover .cast-row__thumb {
-  transform: rotate(-8deg) scale(1.08);
+.cast-row__hit:hover .cast-row__thumb > * {
+  transform: scale(1.08);
 }
 
 .cast-row__names {

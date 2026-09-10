@@ -1,6 +1,6 @@
 import './CastNav.css'
 
-export default function CastNav({ bagCount }) {
+export default function CastNav({ bagCount, onOpenBag }) {
   return (
     <header className="cast-nav">
       <a href="#top" className="cast-nav__mark">
@@ -11,10 +11,12 @@ export default function CastNav({ bagCount }) {
         <a href="#shop">Shop</a>
         <a href="#story">About</a>
       </nav>
-      <a href="#shop" className="cast-nav__bag" aria-label={`Bag, ${bagCount} items`}>
+      {/* opens the Bag drawer — a real button, not a link, since it doesn't
+          navigate anywhere; matches the semantic fix from Audit #1 */}
+      <button type="button" className="cast-nav__bag" onClick={onOpenBag} aria-label={`Bag, ${bagCount} items`}>
         Bag
         <span className={`cast-nav__count ${bagCount > 0 ? 'is-active' : ''}`}>{bagCount}</span>
-      </a>
+      </button>
     </header>
   )
 }

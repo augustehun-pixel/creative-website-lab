@@ -1,4 +1,4 @@
-import RingGlyph from './RingGlyph.jsx'
+import ProductImage from './ProductImage.jsx'
 import CAST from '../data/castData.js'
 import useInView from '../hooks/useInView.js'
 import './CastCollection.css'
@@ -20,7 +20,15 @@ export default function CastCollection({ onOpenRing, onAddToBag }) {
           <li className="cast-row" style={{ '--i': i }} key={member.id}>
             <button type="button" className="cast-row__hit" onClick={() => onOpenRing(member.id)}>
               <span className="cast-row__thumb">
-                <RingGlyph id={`shop-${member.id}`} type={member.ringType} finish={member.finish} />
+                <ProductImage
+                  src={member.images?.hero}
+                  alt={`${member.ringName} — product photo`}
+                  label="Photo"
+                  ringType={member.ringType}
+                  finish={member.finish}
+                  placeholderId={`shop-${member.id}`}
+                  compact
+                />
               </span>
               <span className="cast-row__names">
                 <strong>{member.ringName}</strong>

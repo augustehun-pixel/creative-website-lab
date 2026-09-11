@@ -15,6 +15,23 @@
      oxidized piece reads visibly darker/duller than a polished one. */
   --loop-silver-oxidized: #86867a;
 
+  /* PHASE 1 — black/charcoal jewelry-brand identity, introduced for
+     Header + Hero only (see CastNav.css / CastHero.css). Three near-black
+     tones instead of one flat black, so stacked dark sections still read
+     as handmade/uneven rather than a single poured slab of color; the
+     rest of the site keeps using --cast-green/--cast-ink/--cast-paper
+     above untouched until a later phase moves them over too. */
+  --loop-black-deep: #080808;
+  --loop-black-1: #0d0d0c;
+  --loop-black-2: #11110f;
+  --loop-ivory: #f2f0e8;
+  --loop-muted: #a39a8c;
+  --loop-hairline: #242220;
+  /* a step lighter than the black tones above — the workshop card surface,
+     distinguishable from the bench it sits on without ever being a bright
+     "card on a dark page" jump. */
+  --loop-card-bg: #15140f;
+
   --font-display: 'Archivo Black', system-ui, sans-serif;
   --font-body: 'Space Grotesk', system-ui, sans-serif;
   --font-accent: 'Caveat', cursive;
@@ -32,6 +49,18 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  /* one blanket switch for every animation/transition in the app — the
+     workbench focus/recede motion, the hero drift, the inspection zoom —
+     instead of hunting down and re-gating each keyframe individually. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

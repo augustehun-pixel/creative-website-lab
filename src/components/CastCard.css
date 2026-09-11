@@ -1,81 +1,13 @@
-.cast-grid {
-  background: var(--cast-green);
-  padding: clamp(60px, 8vw, 100px) clamp(20px, 5vw, 60px) 90px;
-}
-
-.cast-grid__intro {
-  max-width: 640px;
-  margin: 0 auto 56px;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.cast-grid.is-in-view .cast-grid__intro {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.cast-grid__intro h2 {
-  font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5vw, 3.2rem);
-  color: var(--cast-ink);
-  margin: 0 0 12px;
-}
-
-.cast-grid__intro p {
-  font-family: var(--font-body);
-  color: var(--cast-ink);
-  font-size: 1.05rem;
-  margin: 0;
-  opacity: 0.85;
-}
-
-/* ---- editorial wall: a 6-column grid, cards span 2/3/6 columns so 2-3
-   faces sit comfortably per row on desktop, with a light vertical stagger
-   for rhythm instead of a uniform product grid. ---- */
-.cast-grid__wall {
-  max-width: 1240px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: clamp(28px, 4vw, 64px) clamp(20px, 3vw, 40px);
-}
-
-.cast-grid__slot {
-  opacity: 0;
-  /* kept smaller than the tightest row gap (24px on mobile) so a card
-     mid-reveal can never transiently overlap the next one below it. */
-  transform: translateY(16px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  transition-delay: calc(var(--i, 0) * 70ms);
-}
-
-.cast-grid.is-in-view .cast-grid__slot {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.cast-grid__slot--lg {
-  grid-column: span 3;
-  margin-top: var(--offset, 0);
-}
-
-.cast-grid__slot--md {
-  grid-column: span 2;
-  margin-top: var(--offset, 0);
-}
-
-.cast-grid__slot--full {
-  grid-column: 1 / -1;
-}
-
 /* ---- the card itself: the ring is the primary image, sitting on its own
    "stage" (a flat tonal disc — no gradient, just a darker paper shade so
    the object has a surface to sit on). The character drops down to a
    small "worn by" portrait underneath — present, but no longer the whole
-   card. ---- */
+   card. Sizing/placement belongs to whatever displays the card (the
+   discovery bench); this file only owns the card's own look.
+   Only the COMING SOON path is reachable today (the real-photo path below
+   isn't used anywhere currently — the bench renders a real ring with its
+   own bigger, frameless markup instead — but its rules are left in place
+   in case a card-style real-product view is needed again later). ---- */
 .cast-card {
   height: 100%;
   display: flex;
@@ -92,9 +24,9 @@
   min-height: 0;
   text-align: center;
   padding: clamp(18px, 2vw, 26px) 16px clamp(14px, 1.5vw, 20px);
-  border: 3px solid var(--cast-ink);
-  border-radius: 18px;
-  background: var(--cast-paper);
+  border: 1px solid var(--loop-hairline);
+  border-radius: 10px;
+  background: var(--loop-card-bg);
   cursor: pointer;
   /* the ring/face SVGs inside are decorative, not separate tap targets —
      without this, iOS Safari can hit-test a fast tap straight to the SVG
@@ -142,13 +74,60 @@
   transform: scale(1.05);
 }
 
+/* COMING SOON: the stage box keeps the exact same footprint as a real
+   photo (so the layout never reflows once a real photo replaces it) but
+   its content is deliberately quiet — no border, no photo-shaped frame,
+   just the character floating in its own card's paper tone with a small
+   label. Never a dashed "empty box": that reads as broken, not as "not
+   yet". */
+.cast-card__soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+/* the character illustration is drawn in black ink — invisible on this
+   card's own dark surface if left alone. The asset itself stays untouched;
+   instead the face sits on its own small light chip, exactly the size of
+   the face and nothing more, so the line art still reads. */
+.cast-card__soon-face {
+  width: clamp(46px, 7vw, 68px);
+  aspect-ratio: 1;
+  padding: 12%;
+  box-sizing: border-box;
+  background: var(--loop-ivory);
+  border-radius: 50%;
+}
+
+.cast-card__soon-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--loop-muted);
+}
+
+.cast-card__status {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--loop-muted);
+}
+
 .cast-card__wearer {
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
   padding-top: 10px;
-  border-top: 2px solid rgba(20, 20, 15, 0.14);
+  border-top: 1px solid var(--loop-hairline);
   text-align: left;
 }
 
@@ -175,17 +154,18 @@
   min-width: 0;
 }
 
+/* hierarchy: the product name is what a shopper should see first — the
+   character name is a smaller caption underneath it, not equal billing. */
 .cast-card__name {
   font-family: var(--font-accent);
-  font-size: 1.05rem;
-  color: var(--cast-ink);
-  opacity: 0.75;
+  font-size: 0.88rem;
+  color: var(--loop-muted);
 }
 
 .cast-card__product {
   font-family: var(--font-display);
-  font-size: 1.05rem;
-  color: var(--cast-ink);
+  font-size: 1.15rem;
+  color: var(--loop-ivory);
   transition: opacity 0.2s ease;
 }
 
@@ -221,7 +201,7 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--cast-ink);
+  color: var(--loop-ivory);
   text-decoration: none;
   opacity: 0;
   transform: translateY(6px);
@@ -247,69 +227,4 @@
 
 .cast-card__view:hover span {
   transform: translateX(3px);
-}
-
-/* ---- Sable's closing spread: ring stage + wearer strip sit side by
-   side, full width, instead of stacked ---- */
-.cast-grid__slot--full .cast-card__hit {
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  text-align: left;
-  gap: clamp(24px, 5vw, 56px);
-  padding: clamp(24px, 4vw, 40px);
-}
-
-.cast-grid__slot--full .cast-card__stage {
-  flex: none;
-  width: clamp(170px, 22vw, 260px);
-  aspect-ratio: 1;
-}
-
-.cast-grid__slot--full .cast-card__wearer {
-  flex: none;
-  width: auto;
-  border-top: none;
-  padding-top: 0;
-}
-
-.cast-grid__slot--full .cast-card__view {
-  margin-top: 14px;
-}
-
-@media (max-width: 1023px) {
-  .cast-grid__wall {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .cast-grid__slot--lg,
-  .cast-grid__slot--md {
-    grid-column: span 1;
-    margin-top: 0;
-  }
-
-  .cast-grid__slot--full .cast-card__hit {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .cast-grid__slot--full .cast-card__stage {
-    width: 56%;
-    height: auto;
-    aspect-ratio: 1;
-  }
-
-  .cast-grid__slot--full .cast-card__wearer {
-    width: 100%;
-    border-top: 2px solid rgba(20, 20, 15, 0.14);
-    padding-top: 10px;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 640px) {
-  .cast-grid__wall {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
 }

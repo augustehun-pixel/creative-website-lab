@@ -10,6 +10,15 @@
   animation: cast-modal-fade 0.2s ease;
 }
 
+/* FOCUS/INSPECT (real product): a darker, near-opaque backdrop — the same
+   material as the bench, not a lighter "popup over the page" scrim. The
+   goal is continuity: the bench went dark, and bringing a ring closer to
+   look at it stays in that same dark space instead of jumping into a
+   bright dialog box. */
+.cast-modal--focus {
+  background: rgba(10, 10, 8, 0.94);
+}
+
 @keyframes cast-modal-fade {
   from {
     opacity: 0;
@@ -48,6 +57,65 @@
   }
 }
 
+/* COMING SOON: a single quiet column, not the two-column real-product
+   layout — smaller panel, no gallery, no purchase controls. Same shell
+   (backdrop, ink border, pop-in animation) so it still reads as LOOP. */
+.cast-modal__panel--soon {
+  grid-template-columns: 1fr;
+  width: min(440px, 100%);
+  text-align: center;
+  justify-items: center;
+}
+
+.cast-modal__soon-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.cast-modal__soon-face {
+  width: clamp(72px, 14vw, 108px);
+  opacity: 0.9;
+}
+
+.cast-modal__soon-badge {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border: 2px solid var(--cast-ink);
+  border-radius: 999px;
+  color: var(--cast-ink);
+  opacity: 0.6;
+}
+
+.cast-modal__info--soon {
+  align-items: center;
+  text-align: center;
+}
+
+.cast-modal__soon-wearer {
+  margin: 4px 0 0;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.cast-modal__info--soon .cast-modal__story {
+  margin-top: 14px;
+}
+
+.cast-modal__soon-note {
+  margin: 18px 0 0;
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  color: var(--cast-ink);
+  opacity: 0.55;
+}
+
 .cast-modal__close {
   position: absolute;
   top: 14px;
@@ -57,6 +125,45 @@
   color: var(--cast-ink);
   cursor: pointer;
   z-index: 1;
+}
+
+/* FOCUS/INSPECT (real product): no card box — the panel is transparent,
+   sitting directly in the dark backdrop so the photo reads as an object
+   in the space, not a picture inside a popup. Everything that assumed an
+   ink border/ink text on a paper background gets repainted for a dark
+   surface below. */
+.cast-modal__panel--focus {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--cast-paper);
+  max-width: 1080px;
+}
+
+.cast-modal__panel--focus .cast-modal__close {
+  color: var(--cast-paper);
+}
+
+.cast-modal__panel--focus .cast-modal__name {
+  color: var(--cast-paper);
+}
+
+/* the photo appears with the panel immediately; the info column follows a
+   beat later — PRODUCT, then INFORMATION, every time this opens. */
+.cast-modal__panel--focus .cast-modal__info {
+  opacity: 0;
+  animation: cast-focus-info-in 0.5s ease 0.22s forwards;
+}
+
+@keyframes cast-focus-info-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ---- PRODUCT WORLD: a real photo gallery, not an illustration stage.
@@ -89,6 +196,15 @@
   max-width: clamp(320px, 40vw, 560px);
 }
 
+/* FOCUS: no "specimen sheet" frame around the photo — it sits directly on
+   the dark backdrop, edges fading into it, the way it already does on the
+   bench. Same photo, same trick, so the transition from bench → focus
+   feels like one continuous space. */
+.cast-modal__panel--focus .cast-modal__gallery {
+  border: none;
+  padding: 0;
+}
+
 .cast-modal__main-photo {
   width: 100%;
   aspect-ratio: 1;
@@ -105,6 +221,72 @@
   .cast-modal__main-photo:hover > * {
     transform: scale(1.03);
   }
+}
+
+.cast-modal__panel--focus .cast-modal__main-photo {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  border: none;
+  background: var(--cast-ink);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.cast-modal__panel--focus .cast-modal__main-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 60px 14px var(--cast-ink);
+  pointer-events: none;
+}
+
+/* the real photo, always inspectable: transform-origin + scale zoom
+   toward whichever honest crop is picked below, on this exact photo. */
+.cast-modal__photo-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+@media (hover: hover) {
+  .cast-modal__panel--focus .cast-modal__main-photo:hover .cast-modal__photo-img {
+    filter: brightness(1.02);
+  }
+}
+
+/* ---- INSPECT: overall / engraving / surface — crops of the one real
+   photo, not new images. Small quiet pills, same language as everything
+   else in LOOP, recolored for the dark focus surface. ---- */
+.cast-modal__inspect {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.cast-modal__inspect button {
+  padding: 7px 14px;
+  border: 2px solid rgba(246, 242, 230, 0.35);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cast-paper);
+  opacity: 0.7;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: opacity 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.cast-modal__inspect button.is-active {
+  background: var(--cast-green);
+  border-color: var(--cast-green);
+  color: var(--cast-ink);
+  opacity: 1;
 }
 
 .cast-modal__thumbs {
@@ -135,6 +317,14 @@
   opacity: 1;
 }
 
+.cast-modal__panel--focus .cast-modal__thumbs button {
+  border-color: rgba(246, 242, 230, 0.35);
+}
+
+.cast-modal__panel--focus .cast-modal__thumbs button.is-active {
+  border-color: var(--cast-paper);
+}
+
 /* the core interaction: a single sliding switch, not two separate flat
    buttons — its own small storytelling moment when it flips. */
 .cast-modal__view-toggle {
@@ -159,6 +349,22 @@
 
 .cast-modal__view-toggle.is-worn::before {
   transform: translateX(100%);
+}
+
+.cast-modal__panel--focus .cast-modal__view-toggle {
+  border-color: var(--cast-paper);
+}
+
+.cast-modal__panel--focus .cast-modal__view-toggle::before {
+  background: var(--cast-green);
+}
+
+.cast-modal__panel--focus .cast-modal__view-toggle button {
+  color: var(--cast-paper);
+}
+
+.cast-modal__panel--focus .cast-modal__view-toggle button.is-active {
+  color: var(--cast-ink);
 }
 
 .cast-modal__view-toggle button {
@@ -192,6 +398,10 @@
   font-size: 0.9rem;
   color: var(--cast-ink);
   opacity: 0.45;
+}
+
+.cast-modal__panel--focus .cast-modal__worn-note {
+  color: var(--cast-paper);
 }
 
 .cast-modal__info {
@@ -295,6 +505,19 @@
   color: var(--cast-paper);
 }
 
+.cast-modal__panel--focus .cast-modal__size {
+  border-color: var(--cast-paper);
+}
+
+.cast-modal__panel--focus .cast-modal__size.is-selected {
+  background: var(--cast-green);
+  color: var(--cast-ink);
+}
+
+.cast-modal__panel--focus .cast-modal__wearer {
+  border-top-color: rgba(246, 242, 230, 0.2);
+}
+
 .cast-modal__add {
   margin-top: 18px;
   padding: 14px 20px;
@@ -338,5 +561,12 @@
 
   .cast-modal__size-list {
     justify-content: center;
+  }
+
+  /* the desktop clamp's minimum can be wider than a phone's available
+     panel width — cap it so the photo never pushes past its own frame. */
+  .cast-modal__gallery,
+  .cast-modal__gallery--featured {
+    max-width: 100%;
   }
 }

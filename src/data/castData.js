@@ -150,4 +150,12 @@ const CAST = [
   },
 ]
 
+// The single source of truth for "is this a real, buyable product yet?" —
+// every card/row/modal checks this instead of re-deriving it, so dropping a
+// real photo into a ring's `images.hero` later is the only change needed to
+// flip that ring from COMING SOON to a full real-product card everywhere.
+export function hasRealPhoto(ring) {
+  return Boolean(ring.images?.hero)
+}
+
 export default CAST

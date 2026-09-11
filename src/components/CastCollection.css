@@ -80,6 +80,52 @@
   transform: scale(1.08);
 }
 
+/* the one row with a real photo gets a modestly bigger thumb — real
+   product visually leads the list, no "featured" label needed to say so */
+.cast-row.is-real .cast-row__hit {
+  grid-template-columns: 96px 1fr auto;
+}
+
+.cast-row.is-real .cast-row__thumb {
+  width: 96px;
+  height: 96px;
+}
+
+/* COMING SOON row: the character sits quietly in the same thumb footprint
+   instead of a fake product photo — small, muted, clearly a person, never
+   mistaken for the ring itself. Scoped to .is-soon only, so the real row's
+   photo thumb (plain block + object-fit: cover) is untouched. */
+.cast-row.is-soon .cast-row__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cast-row__soon-face {
+  width: 58%;
+  opacity: 0.7;
+}
+
+.cast-row__soon-tag {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cast-ink);
+  opacity: 0.4;
+}
+
+.cast-row__add--soon {
+  padding: 9px 14px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cast-ink);
+  opacity: 0.35;
+  cursor: default;
+}
+
 .cast-row__names {
   display: flex;
   flex-direction: column;
@@ -138,12 +184,22 @@
     row-gap: 4px;
   }
 
-  .cast-row__price {
+  .cast-row__price,
+  .cast-row__soon-tag {
     grid-column: 2;
   }
 
   .cast-row__thumb {
     width: 56px;
     height: 56px;
+  }
+
+  .cast-row.is-real .cast-row__hit {
+    grid-template-columns: 72px 1fr;
+  }
+
+  .cast-row.is-real .cast-row__thumb {
+    width: 72px;
+    height: 72px;
   }
 }

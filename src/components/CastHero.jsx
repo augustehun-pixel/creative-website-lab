@@ -1,44 +1,56 @@
-import { useRef } from 'react'
 import CastFace from './CastFace.jsx'
-import CAST from '../data/castData.js'
+import CAST, { hasRealPhoto } from '../data/castData.js'
 import './CastHero.css'
 
-// A handful of cast members float in the hero and drift toward the cursor —
-// the first hint that every face on this site is alive, not decoration.
-const FLOATERS = [CAST[1], CAST[3], CAST[5], CAST[7]]
+// Three small characters scattered around the hero's open space — top-left
+// near the wordmark, top-right by the product photo, bottom-right by the
+// scroll cue — instead of lined up under the copy. A signature, not a
+// scene: small enough that they never compete with the real ring. The
+// actual subject of the hero is whichever ring already has a real photo,
+// shown large on the right; this only ever asks the data "who's real
+// yet," so wiring in a second real photo later needs no change here.
+const SIGNATURE = [CAST[1], CAST[3], CAST[7]]
 
 export default function CastHero() {
-  const sceneRef = useRef(null)
-
-  function handleMouseMove(event) {
-    const scene = sceneRef.current
-    if (!scene) return
-    const rect = scene.getBoundingClientRect()
-    const x = (event.clientX - rect.left) / rect.width - 0.5
-    const y = (event.clientY - rect.top) / rect.height - 0.5
-    scene.style.setProperty('--px', x.toFixed(3))
-    scene.style.setProperty('--py', y.toFixed(3))
-  }
+  const heroRing = CAST.find(hasRealPhoto)
 
   return (
-    <section id="top" className="cast-hero" ref={sceneRef} onMouseMove={handleMouseMove}>
-      <div className="cast-hero__floaters" aria-hidden="true">
-        {FLOATERS.map((member, i) => (
-          <div className={`cast-hero__floater cast-hero__floater--${i}`} key={member.id}>
-            <CastFace id={member.id} species={member.species} hair={member.hair} accessory={member.accessory} mood={member.mood} />
-          </div>
+    <section id="top" className="cast-hero">
+      <div className="cast-hero__signature" aria-hidden="true">
+        {SIGNATURE.map((member, i) => (
+          <span className={`cast-hero__signature-face cast-hero__signature-face--${i}`} key={member.id}>
+            <CastFace
+              id={`hero-sig-${member.id}`}
+              species={member.species}
+              hair={member.hair}
+              accessory={member.accessory}
+              mood={member.mood}
+            />
+          </span>
         ))}
       </div>
 
-      <div className="cast-hero__copy">
-        <p className="cast-hero__eyebrow">handmade silver rings</p>
-        <h1 className="cast-hero__mark">LOOP</h1>
-        <p className="cast-hero__tag">A ring for every personality. Find yours.</p>
-      </div>
+      <div className="cast-hero__grid">
+        <div className="cast-hero__copy">
+          <p className="cast-hero__eyebrow">handmade silver rings</p>
+          <h1 className="cast-hero__mark">LOOP</h1>
+          <p className="cast-hero__tag">A ring for every personality. Real silver, sitting right here.</p>
 
-      <a href="#cast" className="cast-hero__scroll">
-        meet the loop <span>↓</span>
-      </a>
+          <a href="#cast" className="cast-hero__scroll">
+            onto the bench <span>↓</span>
+          </a>
+        </div>
+
+        {heroRing && (
+          <div className="cast-hero__visual">
+            <img
+              className="cast-hero__product-photo"
+              src={heroRing.images.hero}
+              alt={`${heroRing.ringName} — real handmade silver ring`}
+            />
+          </div>
+        )}
+      </div>
     </section>
   )
 }

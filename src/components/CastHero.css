@@ -1,51 +1,103 @@
 .cast-hero {
   position: relative;
-  min-height: 92vh;
-  background: var(--cast-green);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  background: var(--loop-black-2);
+  padding: clamp(100px, 12vw, 150px) clamp(24px, 5vw, 64px) clamp(64px, 7vw, 96px);
   overflow: hidden;
-  padding: 80px 20px 60px;
-  --px: 0;
-  --py: 0;
+}
+
+.cast-hero__grid {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 90px);
 }
 
 .cast-hero__copy {
   position: relative;
   z-index: 2;
-  text-align: center;
+  text-align: left;
 }
 
 .cast-hero__eyebrow {
   font-family: var(--font-accent);
   font-size: clamp(1.1rem, 2vw, 1.4rem);
-  color: var(--cast-ink);
-  margin: 0 0 4px;
+  color: var(--loop-muted);
+  margin: 0 0 6px;
 }
 
 .cast-hero__mark {
   font-family: var(--font-display);
-  font-size: clamp(4.5rem, 16vw, 11rem);
-  line-height: 0.9;
+  font-size: clamp(3.6rem, 8.5vw, 8rem);
+  line-height: 0.92;
   margin: 0;
-  color: var(--cast-ink);
+  color: var(--loop-ivory);
   letter-spacing: -0.02em;
 }
 
 .cast-hero__tag {
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: clamp(1rem, 2vw, 1.3rem);
-  color: var(--cast-ink);
-  margin: 10px 0 0;
+  font-weight: 500;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  color: var(--loop-muted);
+  margin: 16px 0 0;
+  max-width: 32ch;
+}
+
+/* LOOP's signature — scattered in the hero's own open space, not lined up
+   under the copy. Small and quiet on purpose: a flourish the eye finds
+   second, never a scene competing with the real ring. */
+.cast-hero__signature {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.cast-hero__signature-face {
+  position: absolute;
+  display: block;
+  width: clamp(28px, 2.8vw, 40px);
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.3));
+  animation: cast-drift 6s ease-in-out infinite;
+}
+
+/* top-left, near the wordmark */
+.cast-hero__signature-face--0 {
+  top: 5%;
+  left: 3%;
+  animation-delay: 0s;
+}
+
+/* top-right, just above the product photo */
+.cast-hero__signature-face--1 {
+  top: 3%;
+  right: 6%;
+  animation-delay: 0.6s;
+}
+
+/* bottom-right corner of the whole scene */
+.cast-hero__signature-face--2 {
+  bottom: 6%;
+  right: 3%;
+  animation-delay: 1.2s;
+}
+
+@keyframes cast-drift {
+  0%,
+  100% {
+    margin-top: 0;
+  }
+  50% {
+    margin-top: -8px;
+  }
 }
 
 .cast-hero__scroll {
   position: relative;
   z-index: 2;
-  margin-top: 56px;
+  margin-top: 40px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -54,7 +106,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.8rem;
-  color: var(--cast-ink);
+  color: var(--loop-ivory);
   text-decoration: none;
 }
 
@@ -73,87 +125,90 @@
   }
 }
 
-.cast-hero__floaters {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+/* ---- the product: no card, no border, no drop shadow underneath it — a
+   shadow would read as "a photo placed on the page," which is exactly the
+   look we're removing. Instead the photo's own edges genuinely fade out
+   (a real alpha mask, not a blur or a darkening overlay) into the same
+   near-black the section sits on, so the object just exists in the space.
+   The source photo itself is never touched — only how much of its edge
+   shows is masked. ---- */
+.cast-hero__visual {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--loop-black-2);
+  -webkit-mask-image: radial-gradient(ellipse 84% 86% at 50% 48%, #000 68%, transparent 100%);
+  mask-image: radial-gradient(ellipse 84% 86% at 50% 48%, #000 68%, transparent 100%);
 }
 
-.cast-hero__floater {
-  position: absolute;
-  width: clamp(90px, 11vw, 150px);
-  filter: drop-shadow(0 6px 0 rgba(17, 17, 17, 0.08));
-  transition: transform 0.15s ease-out;
-  animation: cast-drift 6s ease-in-out infinite;
+.cast-hero__product-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 40% 50%;
+  transition: transform 0.5s ease;
 }
 
-.cast-hero__floater--0 {
-  top: 12%;
-  left: 10%;
-  --depth: 26px;
-  animation-delay: 0s;
-  transform: translate(calc(var(--px) * var(--depth)), calc(var(--py) * var(--depth))) rotate(-6deg);
-}
-
-.cast-hero__floater--1 {
-  top: 18%;
-  right: 8%;
-  --depth: 40px;
-  animation-delay: 0.8s;
-  transform: translate(calc(var(--px) * var(--depth)), calc(var(--py) * var(--depth))) rotate(8deg);
-}
-
-.cast-hero__floater--2 {
-  bottom: 10%;
-  left: 14%;
-  --depth: 18px;
-  animation-delay: 1.6s;
-  transform: translate(calc(var(--px) * var(--depth)), calc(var(--py) * var(--depth))) rotate(4deg);
-}
-
-.cast-hero__floater--3 {
-  bottom: 14%;
-  right: 12%;
-  --depth: 32px;
-  animation-delay: 2.4s;
-  transform: translate(calc(var(--px) * var(--depth)), calc(var(--py) * var(--depth))) rotate(-4deg);
-}
-
-@keyframes cast-drift {
-  0%,
-  100% {
-    margin-top: 0;
-  }
-  50% {
-    margin-top: -14px;
+@media (hover: hover) {
+  .cast-hero__visual:hover .cast-hero__product-photo {
+    transform: scale(1.03);
   }
 }
 
-@media (max-width: 900px) {
-  .cast-hero__floater--1,
-  .cast-hero__floater--3 {
+@media (max-width: 1000px) {
+  .cast-hero {
+    padding: clamp(90px, 14vw, 120px) clamp(20px, 6vw, 48px) 56px;
+  }
+
+  .cast-hero__grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+
+  .cast-hero__copy {
+    text-align: center;
+  }
+
+  .cast-hero__tag {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* stacked layout: "top-right of the photo" and "bottom-right of the
+     scene" stop meaning anything once text and photo are no longer
+     side-by-side — keep only the one near the wordmark, which still
+     reads fine above a centered, stacked column. */
+  .cast-hero__signature-face--1,
+  .cast-hero__signature-face--2 {
     display: none;
+  }
+
+  .cast-hero__signature-face--0 {
+    top: 2%;
+    left: 6%;
+  }
+
+  .cast-hero__scroll {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .cast-hero__visual {
+    aspect-ratio: 4 / 3;
+    max-width: 560px;
+    margin: 0 auto;
   }
 }
 
 @media (max-width: 560px) {
   .cast-hero {
-    min-height: 80vh;
-    padding: 64px 16px 40px;
+    padding-top: 88px;
   }
 
-  .cast-hero__floater {
-    width: 70px;
-  }
-
-  .cast-hero__floater--0 {
-    top: 8%;
-    left: 6%;
-  }
-
-  .cast-hero__floater--2 {
-    bottom: 6%;
-    right: 8%;
-    left: auto;
+  .cast-hero__visual {
+    aspect-ratio: 5 / 4;
   }
 }

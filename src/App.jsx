@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import CastNav from './components/CastNav.jsx'
 import CastHero from './components/CastHero.jsx'
-import CastGrid from './components/CastGrid.jsx'
+import CastDiscovery from './components/CastDiscovery.jsx'
 import CastCollection from './components/CastCollection.jsx'
 import CastStory from './components/CastStory.jsx'
 import CastFooter from './components/CastFooter.jsx'
@@ -72,7 +72,7 @@ function App() {
     <main>
       <CastNav bagCount={bagCount} onOpenBag={() => setBagOpen(true)} />
       <CastHero />
-      <CastGrid onOpenRing={setActiveRingId} />
+      <CastDiscovery onOpenRing={setActiveRingId} activeRingId={activeRingId} />
       <CastCollection onOpenRing={setActiveRingId} onAddToBag={handleAddToBag} />
       <CastStory />
       <CastFooter />

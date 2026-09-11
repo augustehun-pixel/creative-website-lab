@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import CastFace from './CastFace.jsx'
 import ProductImage from './ProductImage.jsx'
+import { hasRealPhoto } from '../data/castData.js'
 import './CastProductModal.css'
 
 // PRODUCT WORLD slot labels — plain, honest names for what each shot is,
@@ -16,6 +17,20 @@ const SLOT_LABEL = {
 
 const OBJECT_SLOTS = ['hero', 'angle', 'detail']
 const WORN_SLOTS = ['worn', 'lifestyle']
+
+// INSPECTION — honest crops of whichever real photo is on screen, not
+// invented angles. "Overall" is the photo as shot; "Engraving" and
+// "Silver surface" zoom toward the regions of *this specific photograph*
+// where that detail is actually visible (picked by eye against
+// public/IMG_0940.jpeg), via CSS transform-origin + scale on the same
+// <img> — no crop images generated, nothing pixelated past what the
+// source photo actually holds. Applies to whatever slot is active, so it
+// keeps working once more real photos exist.
+const INSPECT_VIEWS = [
+  { id: 'overall', label: 'Overall', origin: '50% 46%', scale: 1 },
+  { id: 'engraving', label: 'Engraving', origin: '30% 58%', scale: 2.1 },
+  { id: 'surface', label: 'Silver surface', origin: '68% 66%', scale: 2.2 },
+]
 
 // One great photo beats three empty boxes: a group with a single real
 // photo shows it large with no thumbnail row; 2+ real photos get a proper
@@ -35,6 +50,7 @@ function gallerySlotsFor(groupSlots, images) {
 // → size → bag flow. `key={ring.id}` on the parent's usage resets size
 // selection whenever a different ring opens.
 export default function CastProductModal({ ring, onClose, onAddToBag }) {
+  const isReal = hasRealPhoto(ring)
   const [size, setSize] = useState(ring.sizes[Math.floor(ring.sizes.length / 2)])
   const [added, setAdded] = useState(false)
   const price = `₩${(ring.price * 1000).toLocaleString('en-US')}`
@@ -55,6 +71,7 @@ export default function CastProductModal({ ring, onClose, onAddToBag }) {
   const [mode, setMode] = useState('object')
   const activeGroup = mode === 'worn' && showToggle ? wornGroup : objectGroup
   const [activeSlot, setActiveSlot] = useState(activeGroup.slots[0])
+  const [inspect, setInspect] = useState(INSPECT_VIEWS[0])
 
   useEffect(() => {
     function handleKey(event) {
@@ -63,6 +80,42 @@ export default function CastProductModal({ ring, onClose, onAddToBag }) {
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
   }, [onClose])
+
+  // Switching photos (or object/worn) should never leave an old zoom
+  // crop applied to a new picture — every new photo starts at "Overall".
+  useEffect(() => {
+    setInspect(INSPECT_VIEWS[0])
+  }, [activeSlot])
+
+  // COMING SOON: no real photo yet means no size picker, no Add to Bag, no
+  // gallery pretending to be one — just the character, the name, and the
+  // story, in the same modal shell (backdrop, close button, Escape-to-close)
+  // the real product uses. The moment `ring.images.hero` gets a real path,
+  // `isReal` flips and this ring renders through the full branch below
+  // instead — no other change needed here.
+  if (!isReal) {
+    return (
+      <div className="cast-modal" role="dialog" aria-modal="true" aria-label={`${ring.ringName} — coming soon`} onClick={onClose}>
+        <div className="cast-modal__panel cast-modal__panel--soon" onClick={(e) => e.stopPropagation()}>
+          <button type="button" className="cast-modal__close" onClick={onClose} aria-label="Close">
+            ×
+          </button>
+          <div className="cast-modal__soon-visual">
+            <span className="cast-modal__soon-face">
+              <CastFace id={`modal-soon-${ring.id}`} species={ring.species} hair={ring.hair} accessory="none" mood={ring.mood} />
+            </span>
+            <span className="cast-modal__soon-badge">Coming soon</span>
+          </div>
+          <div className="cast-modal__info cast-modal__info--soon">
+            <h3 className="cast-modal__name">{ring.ringName}</h3>
+            <p className="cast-modal__soon-wearer">worn by {ring.name}</p>
+            <p className="cast-modal__story">{ring.story}</p>
+            <p className="cast-modal__soon-note">Still being made — real photos are on the way.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   function handleAdd() {
     onAddToBag(ring, size)
@@ -76,24 +129,37 @@ export default function CastProductModal({ ring, onClose, onAddToBag }) {
   }
 
   return (
-    <div className="cast-modal" role="dialog" aria-modal="true" aria-label={`${ring.ringName} detail`} onClick={onClose}>
-      <div className="cast-modal__panel" onClick={(e) => e.stopPropagation()}>
+    <div className="cast-modal cast-modal--focus" role="dialog" aria-modal="true" aria-label={`${ring.ringName} detail`} onClick={onClose}>
+      <div className="cast-modal__panel cast-modal__panel--focus" onClick={(e) => e.stopPropagation()}>
         <button type="button" className="cast-modal__close" onClick={onClose} aria-label="Close">
           ×
         </button>
 
         <div className="cast-modal__visual">
-          <div className={`cast-modal__gallery ${activeGroup.isReal ? 'cast-modal__gallery--featured' : ''}`}>
+          <div className="cast-modal__gallery cast-modal__gallery--featured">
+            {/* the real photo itself — no card border, no placeholder path
+                possible here (this branch only renders once the ring has a
+                real photo), just the object with room to zoom into it */}
             <div className="cast-modal__main-photo">
-              <ProductImage
+              <img
+                key={activeSlot}
                 src={images[activeSlot]}
-                alt={`${ring.ringName} — ${SLOT_LABEL[activeSlot]}`}
-                label={SLOT_LABEL[activeSlot]}
-                sublabel="coming later"
-                ringType={ring.ringType}
-                finish={ring.finish}
-                placeholderId={`modal-${ring.id}-${activeSlot}`}
+                alt={`${ring.ringName} — ${SLOT_LABEL[activeSlot]}, ${inspect.label.toLowerCase()} view`}
+                className="cast-modal__photo-img"
+                style={{ transformOrigin: inspect.origin, transform: `scale(${inspect.scale})` }}
               />
+            </div>
+            <div className="cast-modal__inspect" role="group" aria-label="Inspect this ring">
+              {INSPECT_VIEWS.map((view) => (
+                <button
+                  type="button"
+                  key={view.id}
+                  className={inspect.id === view.id ? 'is-active' : ''}
+                  onClick={() => setInspect(view)}
+                >
+                  {view.label}
+                </button>
+              ))}
             </div>
             {activeGroup.slots.length > 1 && (
               <div className="cast-modal__thumbs" role="group" aria-label="More views">

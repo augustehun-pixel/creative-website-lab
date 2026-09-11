@@ -1,0 +1,179 @@
+/* THE BENCH — a dark, shared surface every ring sits on, instead of a
+   repeating card grid. A step deeper than the hero's black on purpose —
+   the section change should register as you scroll, without a hard color
+   jump — and the real photo's own near-black background blends straight
+   into it with no visible frame: an object resting in the space, not a
+   picture in a box. */
+.bench {
+  background: var(--loop-black-deep);
+  padding: clamp(60px, 8vw, 100px) 0 clamp(50px, 6vw, 80px);
+  overflow: hidden;
+}
+
+.bench__intro {
+  max-width: 640px;
+  margin: 0 auto clamp(36px, 5vw, 56px);
+  padding: 0 20px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.bench.is-in-view .bench__intro {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bench__eyebrow {
+  font-family: var(--font-accent);
+  font-size: 1.15rem;
+  color: var(--cast-green);
+  margin: 0 0 6px;
+}
+
+.bench__intro h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.6vw, 3rem);
+  color: var(--loop-ivory);
+  margin: 0 0 10px;
+}
+
+.bench__intro p:not(.bench__eyebrow) {
+  font-family: var(--font-body);
+  color: var(--loop-muted);
+  margin: 0;
+}
+
+/* ---- the rail: every ring in one horizontally scrollable space, resting
+   on a shared baseline (align-items: flex-end) like objects set down on
+   the same bench. Native scroll does the "explore the space" work on
+   every device — no custom drag/swipe JS needed, nothing to break on
+   iPad Safari. ---- */
+.bench__rail {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(22px, 3.4vw, 48px);
+  padding: 10px clamp(24px, 7vw, 90px) 26px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.bench__rail::-webkit-scrollbar {
+  display: none;
+}
+
+.bench__slot {
+  flex: none;
+  scroll-snap-align: center;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease calc(var(--i, 0) * 60ms), transform 0.5s ease calc(var(--i, 0) * 60ms);
+}
+
+.bench.is-in-view .bench__slot {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* once revealed, "forward"/"dimmed" react immediately — no stagger delay
+   left over from the entrance animation. */
+.bench__slot.is-forward,
+.bench__slot.is-dimmed {
+  transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
+}
+
+.bench__slot.is-forward {
+  transform: translateY(-6px) scale(1.03);
+}
+
+.bench__slot.is-dimmed {
+  opacity: 0.5;
+  filter: blur(1px) saturate(0.7);
+  transform: scale(0.96);
+}
+
+/* ---- REAL slot: the star of the bench. No card border, no card
+   background — the photo itself is the object (see the mask on
+   .bench__real-photo below for how its edges blend into the bench). ---- */
+.bench__slot--real {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: clamp(240px, 30vw, 420px);
+  padding: 0;
+  border: none;
+  background: none;
+  text-align: center;
+  touch-action: manipulation;
+}
+
+/* no drop shadow, no dark overlay — the photo's own edges genuinely fade
+   (mask, not blur) into the bench's own black, the same honest technique
+   the hero uses. The source photo is untouched either way. */
+.bench__real-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  background: var(--loop-black-deep);
+  -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 48%, #000 68%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 85% at 50% 48%, #000 68%, transparent 100%);
+}
+
+.bench__real-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+@media (hover: hover) {
+  .bench__slot--real:hover .bench__real-photo img {
+    transform: scale(1.04);
+  }
+}
+
+.bench__slot--real.is-forward .bench__real-photo img {
+  transform: scale(1.04);
+}
+
+.bench__real-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bench__real-caption strong {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--loop-ivory);
+}
+
+.bench__real-caption span {
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  color: var(--loop-muted);
+}
+
+/* ---- COMING SOON slot: the existing quiet card, just smaller and set
+   further back on the bench — a smaller, quieter card in dim light reads
+   as "further away," which is exactly the point. ---- */
+.bench__slot--soon {
+  width: clamp(148px, 15vw, 190px);
+}
+
+@media (max-width: 640px) {
+  .bench__slot--real {
+    width: clamp(220px, 62vw, 280px);
+  }
+
+  .bench__slot--soon {
+    width: 138px;
+  }
+}
